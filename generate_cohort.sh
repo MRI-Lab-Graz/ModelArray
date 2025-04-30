@@ -1,41 +1,63 @@
 #!/bin/bash
 
-# Usage: ./generate_cohort.sh participants.tsv NII_folder mask_folder
+# Usage: ./generate_cohort.sh -p participants.tsv -d NII_folder -m mask_folder [-o output_folder]
 
-PARTICIPANTS_FILE="$1"
-NII_FOLDER="$2"
-MASK_FOLDER="$3"
-
-if [[ ! -f "$PARTICIPANTS_FILE" || ! -d "$NII_FOLDER" || ! -d "$MASK_FOLDER" ]]; then
-  echo "Usage: $0 participants.tsv NII_folder mask_folder"
+usage() {
+  echo "Usage: $0 -p participants.tsv -d NII_folder -m mask_folder [-o output_folder]"
   exit 1
+}
+
+# Parse arguments
+while getopts ":p:d:m:o:" opt; do
+  case ${opt} in
+    p ) PARTICIPANTS_FILE="$OPTARG"
+      ;;
+    d ) NII_FOLDER="$OPTARG"
+      ;;
+    m ) MASK_FOLDER="$OPTARG"
+      ;;
+    o ) OUTPUT_FOLDER="$OPTARG"
+      ;;
+    \? )
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      ;;
+    : )
+      echo "Option -$OPTARG requires an argument." >&2
+      usage
+      ;;
+  esac
+done
+
+# Check required arguments
+if [[ -z "$PARTICIPANTS_FILE" || -z "$NII_FOLDER" || -z "$MASK_FOLDER" ]]; then
+  echo "Missing required arguments."
+  usage
 fi
 
-# Read header from participants.tsv to extract extra columns
+# Set default output folder if not specified
+OUTPUT_FOLDER="${OUTPUT_FOLDER:-.}"
+mkdir -p "$OUTPUT_FOLDER"
+
+# Extract header
 HEADER=$(head -n 1 "$PARTICIPANTS_FILE")
 IFS=$'\t' read -r -a COLUMNS <<< "$HEADER"
-
-# Prepare output header line with proper comma separation
 EXTRA_COLS=$(IFS=','; echo "${COLUMNS[*]:1}")
 
-# Probe a file to determine scalar name (from Nifit folder name)
+# Find scalar name
 FIRST_NII_FILE=$(find "$NII_FOLDER" -type f -name "*.nii.gz" | head -n 1)
 if [[ -z "$FIRST_NII_FILE" ]]; then
   echo "No Nifit file found in $NII_FOLDER"
   exit 1
 fi
-
 SCALAR_NAME=$(basename "$(dirname "$FIRST_NII_FILE")")
-OUTPUT_FILE="cohort_${SCALAR_NAME}.csv"
+OUTPUT_FILE="$OUTPUT_FOLDER/cohort_${SCALAR_NAME}.csv"
 
-# Write header to output file
 echo "scalar_name,source_file,source_mask_file,subject_id,$EXTRA_COLS" > "$OUTPUT_FILE"
 
-# To store reference dimensions
 REF_DIM=""
 REF_SUBJECT=""
 
-# Read participants line by line
 tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
   SUBJECT_ID="${LINE[0]}"
   SUBJECT_SHORT=$(echo "$SUBJECT_ID" | cut -d'_' -f1)
@@ -49,10 +71,6 @@ tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
 
     if [[ "$NII_DIM" != "$MASK_DIM" ]]; then
       echo "ERROR: Dimension mismatch between Nifit and mask for subject $SUBJECT_SHORT"
-      echo "  Nifit file:    $NII_FILE"
-      echo "  Mask file:  $MASK_FILE"
-      echo "  Nifit dim:     $NII_DIM"
-      echo "  Mask dim:   $MASK_DIM"
       exit 1
     fi
 
@@ -61,10 +79,6 @@ tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
       REF_SUBJECT="$SUBJECT_SHORT"
     elif [[ "$NII_DIM" != "$REF_DIM" ]]; then
       echo "ERROR: Dimension mismatch with reference subject $REF_SUBJECT"
-      echo "  Current subject: $SUBJECT_SHORT"
-      echo "  Current dim:     $NII_DIM"
-      echo "  Reference dim:   $REF_DIM"
-      echo "  NII file:         $NII_FILE"
       exit 1
     fi
 

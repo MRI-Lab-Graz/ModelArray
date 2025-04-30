@@ -1,0 +1,1 @@
+singularity run --cleanenv -B /data/local/129_PK01/noddi:/data     /data/local/container/modelarray/modelarray_confixel_0.1.5.sif volumestats_write     --group-mask-file group_mask.nii.gz     --cohort-file cohort_OD.csv     --relative-root /data     --analysis-name results_lm     --input-hdf5 OD.h5     --output-dir OD_stats     --output-ext .nii.gz 

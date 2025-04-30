@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Usage: ./generate_cohort.sh participants.tsv OD_folder mask_folder
+# Usage: ./generate_cohort.sh participants.tsv NII_folder mask_folder
 
 PARTICIPANTS_FILE="$1"
-OD_FOLDER="$2"
+NII_FOLDER="$2"
 MASK_FOLDER="$3"
 
-if [[ ! -f "$PARTICIPANTS_FILE" || ! -d "$OD_FOLDER" || ! -d "$MASK_FOLDER" ]]; then
-  echo "Usage: $0 participants.tsv OD_folder mask_folder"
+if [[ ! -f "$PARTICIPANTS_FILE" || ! -d "$NII_FOLDER" || ! -d "$MASK_FOLDER" ]]; then
+  echo "Usage: $0 participants.tsv NII_folder mask_folder"
   exit 1
 fi
 
@@ -18,14 +18,14 @@ IFS=$'\t' read -r -a COLUMNS <<< "$HEADER"
 # Prepare output header line with proper comma separation
 EXTRA_COLS=$(IFS=','; echo "${COLUMNS[*]:1}")
 
-# Probe a file to determine scalar name (from OD folder name)
-FIRST_OD_FILE=$(find "$OD_FOLDER" -type f -name "*.nii.gz" | head -n 1)
-if [[ -z "$FIRST_OD_FILE" ]]; then
-  echo "No OD file found in $OD_FOLDER"
+# Probe a file to determine scalar name (from Nifit folder name)
+FIRST_NII_FILE=$(find "$NII_FOLDER" -type f -name "*.nii.gz" | head -n 1)
+if [[ -z "$FIRST_NII_FILE" ]]; then
+  echo "No Nifit file found in $NII_FOLDER"
   exit 1
 fi
 
-SCALAR_NAME=$(basename "$(dirname "$FIRST_OD_FILE")")
+SCALAR_NAME=$(basename "$(dirname "$FIRST_NII_FILE")")
 OUTPUT_FILE="cohort_${SCALAR_NAME}.csv"
 
 # Write header to output file
@@ -40,41 +40,41 @@ tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
   SUBJECT_ID="${LINE[0]}"
   SUBJECT_SHORT=$(echo "$SUBJECT_ID" | cut -d'_' -f1)
 
-  OD_FILE=$(find "$OD_FOLDER" -type f -name "${SUBJECT_SHORT}*.nii.gz" | head -n 1)
+  NII_FILE=$(find "$NII_FOLDER" -type f -name "${SUBJECT_SHORT}*.nii.gz" | head -n 1)
   MASK_FILE=$(find "$MASK_FOLDER" -type f -name "${SUBJECT_SHORT}*.nii.gz" | head -n 1)
 
-  if [[ -f "$OD_FILE" && -f "$MASK_FILE" ]]; then
-    OD_DIM=$(mrinfo "$OD_FILE" -quiet -size | tr -d '\n')
+  if [[ -f "$NII_FILE" && -f "$MASK_FILE" ]]; then
+    NII_DIM=$(mrinfo "$NII_FILE" -quiet -size | tr -d '\n')
     MASK_DIM=$(mrinfo "$MASK_FILE" -quiet -size | tr -d '\n')
 
-    if [[ "$OD_DIM" != "$MASK_DIM" ]]; then
-      echo "ERROR: Dimension mismatch between OD and mask for subject $SUBJECT_SHORT"
-      echo "  OD file:    $OD_FILE"
+    if [[ "$NII_DIM" != "$MASK_DIM" ]]; then
+      echo "ERROR: Dimension mismatch between Nifit and mask for subject $SUBJECT_SHORT"
+      echo "  Nifit file:    $NII_FILE"
       echo "  Mask file:  $MASK_FILE"
-      echo "  OD dim:     $OD_DIM"
+      echo "  Nifit dim:     $NII_DIM"
       echo "  Mask dim:   $MASK_DIM"
       exit 1
     fi
 
     if [[ -z "$REF_DIM" ]]; then
-      REF_DIM="$OD_DIM"
+      REF_DIM="$NII_DIM"
       REF_SUBJECT="$SUBJECT_SHORT"
-    elif [[ "$OD_DIM" != "$REF_DIM" ]]; then
+    elif [[ "$NII_DIM" != "$REF_DIM" ]]; then
       echo "ERROR: Dimension mismatch with reference subject $REF_SUBJECT"
       echo "  Current subject: $SUBJECT_SHORT"
-      echo "  Current dim:     $OD_DIM"
+      echo "  Current dim:     $NII_DIM"
       echo "  Reference dim:   $REF_DIM"
-      echo "  OD file:         $OD_FILE"
+      echo "  NII file:         $NII_FILE"
       exit 1
     fi
 
-    SHORT_OD=$(basename "$(dirname "$OD_FILE")")/$(basename "$OD_FILE")
+    SHORT_NII=$(basename "$(dirname "$NII_FILE")")/$(basename "$NII_FILE")
     SHORT_MASK=$(basename "$(dirname "$MASK_FILE")")/$(basename "$MASK_FILE")
 
     METADATA=$(IFS=','; echo "${LINE[*]:1}")
-    echo "$SCALAR_NAME,$SHORT_OD,$SHORT_MASK,$SUBJECT_SHORT,$METADATA" >> "$OUTPUT_FILE"
+    echo "$SCALAR_NAME,$SHORT_NII,$SHORT_MASK,$SUBJECT_SHORT,$METADATA" >> "$OUTPUT_FILE"
   else
-    echo "WARNING: Missing OD or mask file for $SUBJECT_SHORT"
+    echo "WARNING: Missing Nifit or mask file for $SUBJECT_SHORT"
   fi
 done
 

@@ -1,0 +1,17 @@
+{
+  "data_dir": "/data/local/129_PK01/noddi",
+  "container": "/data/local/container/modelarray/modelarray_confixel_0.1.5.sif",
+  "h5_file": "ISOVF.h5",
+  "csv_file": "cohort_ISOVF.csv",
+  "scaler_type": "ISOVF",
+  "formula_lm": "ISOVF ~ tsdz + age + sex",
+  "num_subj_lthr_abs": 2,
+  "num_subj_lthr_rel": 0.2,
+  "full_outputs": true,
+  "n_cores": 15,
+  "analysis_name": "results_lm",
+  "csv_summary_path": "voxelwise_ISOVF_stats_summary.csv",
+  "group_mask_file": "group_mask.nii.gz",
+  "output_dir": "OD_stats",
+  "output_ext": ".nii.gz"
+}

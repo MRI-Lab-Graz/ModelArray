@@ -73,12 +73,14 @@ phenotypes <- read.csv(csv_path)
 EOF
 
 # Add scaling for continuous covariates
+if [ -n "$CONTINUOUS_COVARIATES" ]; then
 for covariate in $CONTINUOUS_COVARIATES; do
   cat >> "$R_SCRIPT_PATH" <<EOF
 ${covariate}_demean <- scale(phenotypes\$${covariate})
 phenotypes\$${covariate}_DM <- ${covariate}_demean
 EOF
 done
+fi
 
 # Add factorization for categorical variables
 cat >> "$R_SCRIPT_PATH" <<EOF
@@ -86,12 +88,13 @@ cat >> "$R_SCRIPT_PATH" <<EOF
 # Convert categorical variables to factors
 EOF
 
+if [ -n "$CATEGORICAL_VARIABLES" ]; then
 for variable in $CATEGORICAL_VARIABLES; do
   cat >> "$R_SCRIPT_PATH" <<EOF
 phenotypes\$${variable}_F <- factor(phenotypes\$${variable})
 EOF
 done
-
+fi
 # Continue with the rest of the R script
 cat >> "$R_SCRIPT_PATH" <<EOF
 

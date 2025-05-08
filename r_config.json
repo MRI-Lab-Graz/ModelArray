@@ -4,7 +4,7 @@
   "h5_file": "OD.h5",
   "csv_file": "cohort_OD.csv",
   "scaler_type": "OD",
-  "formula": "OD ~ tsdz + age +sex",
+  "formula": "OD ~ tsdz + age",
   "num_subj_lthr_abs": 2,
   "num_subj_lthr_rel": 0.2,
   "full_outputs": true,
@@ -15,5 +15,5 @@
   "output_dir": "OD_female_scaled_stats",
   "output_ext": ".nii.gz",
   "continuous_covariates": ["age"],
-  "categorical_variables": ["sex"]
+  "categorical_variables": []
 }

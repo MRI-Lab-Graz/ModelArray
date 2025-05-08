@@ -2,10 +2,23 @@
 
 # Usage: ./run_from_json.sh /path/to/config.json
 
-CONFIG_PATH="$1"
-if [ ! -f "$CONFIG_PATH" ]; then
-  echo "🛑 Config file not found: $CONFIG_PATH"
-  exit 1
+TEST_MODE=false
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --test)
+            TEST_MODE=true
+            shift
+            ;;
+        *)
+            CONFIG_PATH="$1"
+            shift
+            ;;
+    esac
+done
+
+if [ -z "$CONFIG_PATH" ]; then
+    echo "Usage: $0 [--test] /path/to/config.json"
+    exit 1
 fi
 
 # Function to extract values from JSON
@@ -147,6 +160,13 @@ print(colnames(summary_df))
 EOF
 
 echo "✅ R script generated at: $R_SCRIPT_PATH"
+
+# If in test mode, just show the script and exit
+if [ "$TEST_MODE" = true ]; then
+    echo "=== TEST MODE: Showing R script content ==="
+    cat "$R_SCRIPT_PATH"
+    exit 0
+fi
 
 # Run the model analysis
 singularity run --cleanenv -B "$DATA_DIR:/data" \

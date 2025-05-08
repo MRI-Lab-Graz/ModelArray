@@ -106,8 +106,26 @@ fi
 # Continue with the rest of the R script
 cat >> "$R_SCRIPT_PATH" <<EOF
 
+# Update formula to use demeaned and factorized versions
+formula_terms <- strsplit("$FORMULA", "~")[[1]]
+response_var <- trimws(formula_terms[1])
+predictors <- trimws(formula_terms[2])
 
-formula <- $FORMULA
+# Split predictors and process each one
+predictor_list <- strsplit(predictors, "\\+")[[1]]
+processed_predictors <- sapply(predictor_list, function(x) {
+  var_name <- trimws(x)
+  if (var_name %in% c("$CONTINUOUS_COVARIATES")) {
+    paste0(var_name, "_DM")
+  } else if (var_name %in% c("$CATEGORICAL_VARIABLES")) {
+    paste0(var_name, "_F")
+  } else {
+    var_name
+  }
+})
+
+formula <- as.formula(paste(response_var, "~", paste(processed_predictors, collapse = " + ")))
+
 
 mylm <- ModelArray.${MODEL_TYPE}(
   formula = formula,

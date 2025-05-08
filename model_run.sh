@@ -32,6 +32,11 @@ GROUP_MASK=$(get_json_value '.group_mask_file')
 OUTPUT_DIR=$(get_json_value '.output_dir')
 OUTPUT_EXT=$(get_json_value '.output_ext')
 
+# New fields for scaling and factorization
+CONTINUOUS_COVARIATES=$(get_json_value '.continuous_covariates | join(" ")')
+CATEGORICAL_VARIABLES=$(get_json_value '.categorical_variables | join(" ")')
+
+
 # Validate required files
 REQUIRED_FILES=(
   "$CONTAINER"
@@ -63,6 +68,33 @@ h5_path <- "/data/$H5_FILE"
 csv_path <- "/data/$CSV_FILE"
 modelarray <- ModelArray(h5_path, scalar_types = c("$SCALER_TYPE"))
 phenotypes <- read.csv(csv_path)
+
+# Demean and center continuous covariates
+EOF
+
+# Add scaling for continuous covariates
+for covariate in $CONTINUOUS_COVARIATES; do
+  cat >> "$R_SCRIPT_PATH" <<EOF
+${covariate}_demean <- scale(phenotypes$${covariate})
+phenotypes$${covariate}_DM <- ${covariate}_demean
+EOF
+done
+
+# Add factorization for categorical variables
+cat >> "$R_SCRIPT_PATH" <<EOF
+
+# Convert categorical variables to factors
+EOF
+
+for variable in $CATEGORICAL_VARIABLES; do
+  cat >> "$R_SCRIPT_PATH" <<EOF
+phenotypes$${variable}_F <- factor(phenotypes$${variable})
+EOF
+done
+
+# Continue with the rest of the R script
+cat >> "$R_SCRIPT_PATH" <<EOF
+
 
 formula <- $FORMULA
 

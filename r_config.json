@@ -4,16 +4,16 @@
   "h5_file": "OD.h5",
   "csv_file": "cohort_OD.csv",
   "scaler_type": "OD",
-  "formula": "OD ~ tsdz + age",
+  "formula": "OD ~ tsdz + age +sex",
   "num_subj_lthr_abs": 2,
   "num_subj_lthr_rel": 0.2,
   "full_outputs": true,
   "n_cores": 25,
   "analysis_name": "results_lm",
-  "csv_summary_path": "voxelwise_OD_female_stats_summary.csv",
+  "csv_summary_path": "voxelwise_OD_female_scaled_stats_summary.csv",
   "group_mask_file": "group_mask.nii.gz",
-  "output_dir": "OD_female_stats",
+  "output_dir": "OD_female_scaled_stats",
   "output_ext": ".nii.gz",
-  "continuous_covariates": ["AGE", "logICV", "TOWRE_RAW", "N_CORR"],
-  "categorical_variables": ["SEX", "SITE"]
+  "continuous_covariates": ["age"],
+  "categorical_variables": ["sex"]
 }

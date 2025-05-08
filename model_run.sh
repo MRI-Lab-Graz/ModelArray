@@ -19,7 +19,7 @@ CONTAINER=$(get_json_value '.container')
 H5_FILE=$(get_json_value '.h5_file')
 CSV_FILE=$(get_json_value '.csv_file')
 SCALER_TYPE=$(get_json_value '.scaler_type')
-FORMULA_LM=$(get_json_value '.formula_lm')
+FORMULA=$(get_json_value '.formula')
 NUM_ABS=$(get_json_value '.num_subj_lthr_abs')
 NUM_REL=$(get_json_value '.num_subj_lthr_rel')
 FULL_OUTPUTS=$(get_json_value '.full_outputs' | tr '[:lower:]' '[:upper:]')
@@ -63,12 +63,11 @@ h5_path <- "/data/$H5_FILE"
 csv_path <- "/data/$CSV_FILE"
 modelarray <- ModelArray(h5_path, scalar_types = c("$SCALER_TYPE"))
 phenotypes <- read.csv(csv_path)
-phenotypes\$sex <- as.factor(phenotypes\$sex)
 
-formula.lm <- $FORMULA_LM
+formula <- $FORMULA
 
 mylm <- ModelArray.lm(
-  formula = formula.lm,
+  formula = formula,
   data = modelarray,
   phenotypes = phenotypes,
   scalar = "$SCALER_TYPE",

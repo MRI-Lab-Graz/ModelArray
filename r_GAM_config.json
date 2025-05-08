@@ -4,14 +4,14 @@
   "h5_file": "OD.h5",
   "csv_file": "cohort_OD.csv",
   "scaler_type": "OD",
-  "formula": "OD ~ tsdz + age",
+  "formula": "OD ~ s(tsdz, k = 4) + age + sex",
   "num_subj_lthr_abs": 2,
   "num_subj_lthr_rel": 0.2,
   "full_outputs": true,
   "n_cores": 25,
   "analysis_name": "results_lm",
-  "csv_summary_path": "voxelwise_OD_female_stats_summary.csv",
+  "csv_summary_path": "voxelwise_GAM_OD_stats_summary.csv",
   "group_mask_file": "group_mask.nii.gz",
-  "output_dir": "OD_female_stats",
+  "output_dir": "OD_GAM_stats",
   "output_ext": ".nii.gz"
 }

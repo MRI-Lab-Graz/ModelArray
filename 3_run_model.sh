@@ -125,12 +125,12 @@ response_var <- trimws(formula_terms[1])
 predictors <- trimws(formula_terms[2])
 
 # Split predictors and process each one
-predictor_list <- strsplit(predictors, "\\+")[[1]]
+predictor_list <- strsplit(predictors, "\\\\+")[[1]]  # Fixed escape sequence
 processed_predictors <- sapply(predictor_list, function(x) {
   var_name <- trimws(x)
-  if (var_name %in% c("$CONTINUOUS_COVARIATES")) {
+  if (var_name %in% c($(printf '"%s"' $CONTINUOUS_COVARIATES | paste -sd ","))) {
     paste0(var_name, "_DM")
-  } else if (var_name %in% c("$CATEGORICAL_VARIABLES")) {
+  } else if (var_name %in% c($(printf '"%s"' $CATEGORICAL_VARIABLES | paste -sd ","))) {
     paste0(var_name, "_F")
   } else {
     var_name

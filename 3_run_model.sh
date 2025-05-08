@@ -26,6 +26,8 @@ FULL_OUTPUTS=$(get_json_value '.full_outputs' | tr '[:lower:]' '[:upper:]')
 N_CORES=$(get_json_value '.n_cores')
 ANALYSIS_NAME=$(get_json_value '.analysis_name')
 CSV_SUMMARY=$(get_json_value '.csv_summary_path')
+MODEL_TYPE=$(get_json_value '.model_type')  # New JSON tag for model type
+
 
 # Volumestats export fields
 GROUP_MASK=$(get_json_value '.group_mask_file')
@@ -55,6 +57,12 @@ done
 
 if [ "$MISSING" -eq 1 ]; then
   echo "🛑 One or more required files are missing. Aborting."
+  exit 1
+fi
+
+# Validate MODEL_TYPE
+if [[ "$MODEL_TYPE" != "lm" && "$MODEL_TYPE" != "gam" ]]; then
+  echo "🛑 Invalid model type: $MODEL_TYPE. Must be 'lm' or 'gam'."
   exit 1
 fi
 
@@ -101,7 +109,7 @@ cat >> "$R_SCRIPT_PATH" <<EOF
 
 formula <- $FORMULA
 
-mylm <- ModelArray.lm(
+mylm <- ModelArray.${MODEL_TYPE}(
   formula = formula,
   data = modelarray,
   phenotypes = phenotypes,

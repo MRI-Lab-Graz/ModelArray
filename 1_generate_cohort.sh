@@ -93,3 +93,5 @@ tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
 done
 
 echo "Cohort file created: $OUTPUT_FILE"
+echo "Showing the head to double-check"
+head $OUTPUT_FILE

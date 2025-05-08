@@ -15,5 +15,6 @@
   "output_dir": "OD_female_scaled_stats",
   "output_ext": ".nii.gz",
   "continuous_covariates": ["age"],
-  "categorical_variables": []
+  "categorical_variables": [],
+  "model_type": "lm"
 }

@@ -1,33 +1,71 @@
 #!/bin/bash
 
-# Usage: ./generate_cohort.sh -p participants.tsv -d NII_folder -m mask_folder [-o output_folder]
-
 usage() {
-  echo "Usage: $0 -p participants.tsv -d NII_folder -m mask_folder [-o output_folder]"
+  echo "Usage: $0 -p participants.tsv -d NII_folder -m mask_folder -o output_folder [-s subgroup:value]"
   exit 1
 }
 
+# Default values
+SUBGROUP=""
+COLUMN=""
+VALUE=""
+
 # Parse arguments
-while getopts ":p:d:m:o:" opt; do
-  case ${opt} in
-    p ) PARTICIPANTS_FILE="$OPTARG"
-      ;;
-    d ) NII_FOLDER="$OPTARG"
-      ;;
-    m ) MASK_FOLDER="$OPTARG"
-      ;;
-    o ) OUTPUT_FOLDER="$OPTARG"
-      ;;
-    \? )
-      echo "Invalid option: -$OPTARG" >&2
-      usage
-      ;;
-    : )
-      echo "Option -$OPTARG requires an argument." >&2
-      usage
-      ;;
-  esac
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--subgroup)
+            SUBGROUP="$2"
+            COLUMN="${SUBGROUP%%:*}"
+            VALUE="${SUBGROUP##*:}"
+            shift 2
+            ;;
+        # add any other arguments you already support here
+        -p|--participants)
+            PARTICIPANTS_FILE="$2"
+            shift 2
+            ;;
+        -d|--data-dir)
+            NII_FOLDER="$2"
+            shift 2
+            ;;
+        -o|--output)
+            OUTPUT_FOLDER="$2"
+            shift 2
+            ;;
+        -m|--mask)
+            MASK_FOLDER="$2"
+            shift 2
+            ;;
+        *)
+            echo "Unknown parameter passed: $1"
+            exit 1
+            ;;
+    esac
 done
+
+
+# Prepare filtered participants file if subgrouping is requested
+if [[ -n "$SUBGROUP" ]]; then
+    FILTERED_PARTICIPANTS=$(mktemp)
+    awk -v col="$COLUMN" -v val="$VALUE" '
+    BEGIN { FS="\t"; OFS="\t" }
+    NR==1 {
+        for (i=1; i<=NF; i++) {
+            if ($i == col) colnum=i;
+        }
+        if (!colnum) {
+            print "Error: Column " col " not found in header" > "/dev/stderr";
+            exit 1;
+        }
+        print;
+    }
+    NR>1 {
+        if ($colnum == val) print;
+    }
+    ' "$PARTICIPANTS_FILE" > "$FILTERED_PARTICIPANTS"
+    PARTICIPANTS_FILE="$FILTERED_PARTICIPANTS"
+    OUTPUT="${OUTPUT%.tsv}_${COLUMN}-${VALUE}.tsv"
+fi
 
 # Check required arguments
 if [[ -z "$PARTICIPANTS_FILE" || -z "$NII_FOLDER" || -z "$MASK_FOLDER" ]]; then

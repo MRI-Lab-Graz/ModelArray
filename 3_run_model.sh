@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: ./run_from_json.sh /path/to/config.json
+# Usage: ./run_from_json.sh /path/to/config.json --test
 
 TEST_MODE=false
 while [[ $# -gt 0 ]]; do

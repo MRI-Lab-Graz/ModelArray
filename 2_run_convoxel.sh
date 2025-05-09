@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Usage: ./run_modelarray.sh -c cohort_ISOVF.csv -r /data/study
+usage() {
+ echo " Usage: $0 -c cohort_ISOVF.csv -r /data/study"
+ exit 1
+}
 
 set -e  # Exit on error
 set -o pipefail
@@ -24,11 +27,13 @@ done
 # Check if required options are provided
 if [[ -z "$COHORT_FILE" ]]; then
   echo "ERROR: Cohort file must be specified with -c option."
+usage
   exit 1
 fi
 
 if [[ -z "$RELATIVE_ROOT" ]]; then
   echo "ERROR: Relative root directory must be specified with -r option."
+usage
   exit 1
 fi
 

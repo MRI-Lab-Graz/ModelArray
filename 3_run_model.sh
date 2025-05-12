@@ -79,6 +79,19 @@ if [[ "$MODEL_TYPE" != "lm" && "$MODEL_TYPE" != "gam" ]]; then
   exit 1
 fi
 
+# ✨ Rewrite formula
+FINAL_FORMULA="$FORMULA"
+
+# Replace continuous covariates with _DM
+for covariate in $CONTINUOUS_COVARIATES; do
+  FINAL_FORMULA=$(echo "$FINAL_FORMULA" | sed "s/\\b$covariate\\b/${covariate}_DM/g")
+done
+
+# Replace categorical variables with _F
+for variable in $CATEGORICAL_VARIABLES; do
+  FINAL_FORMULA=$(echo "$FINAL_FORMULA" | sed "s/\\b$variable\\b/${variable}_F/g")
+done
+
 # Generate R script dynamically
 R_SCRIPT_PATH="$DATA_DIR/generated_script.R"
 
@@ -119,25 +132,9 @@ fi
 # Continue with the rest of the R script
 cat >> "$R_SCRIPT_PATH" <<EOF
 
-# Update formula to use demeaned and factorized versions
-formula_terms <- strsplit("$FORMULA", "~")[[1]]
-response_var <- trimws(formula_terms[1])
-predictors <- trimws(formula_terms[2])
 
-# Split predictors and process each one
-predictor_list <- strsplit(predictors, "\\\\+")[[1]]
-processed_predictors <- sapply(predictor_list, function(x) {
-  var_name <- trimws(x)
-  if (var_name %in% c("$(echo $CONTINUOUS_COVARIATES | sed 's/ /","/g')")) {
-    paste0(var_name, "_DM")
-  } else if (var_name %in% c("$(echo $CATEGORICAL_VARIABLES | sed 's/ /","/g')")) {
-    paste0(var_name, "_F")
-  } else {
-    var_name
-  }
-})
-
-formula <- as.formula(paste(response_var, "~", paste(processed_predictors, collapse = " + ")))
+# Use rewritten formula
+formula <- as.formula("$FINAL_FORMULA")
 
 
 mylm <- ModelArray.${MODEL_TYPE}(

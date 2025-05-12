@@ -89,7 +89,15 @@ if [[ -z "$FIRST_NII_FILE" ]]; then
   exit 1
 fi
 SCALAR_NAME=$(basename "$(dirname "$FIRST_NII_FILE")")
-OUTPUT_FILE="$OUTPUT_FOLDER/cohort_${SCALAR_NAME}.csv"
+
+# Format subgroup suffix for filename if provided
+if [[ -n "$SUBGROUP" ]]; then
+  SUBGROUP_SUFFIX="_${COLUMN}_${VALUE}"
+else
+  SUBGROUP_SUFFIX=""
+fi
+
+OUTPUT_FILE="$OUTPUT_FOLDER/cohort_${SCALAR_NAME}${SUBGROUP_SUFFIX}.csv"
 
 echo "scalar_name,source_file,source_mask_file,subject_id,$EXTRA_COLS" > "$OUTPUT_FILE"
 
@@ -123,8 +131,8 @@ tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
     SHORT_NII=$(basename "$(dirname "$NII_FILE")")/$(basename "$NII_FILE")
     SHORT_MASK=$(basename "$(dirname "$MASK_FILE")")/$(basename "$MASK_FILE")
 
-    METADATA=$(IFS=','; echo "${LINE[*]:1}")
-    echo "$SCALAR_NAME,$SHORT_NII,$SHORT_MASK,$SUBJECT_SHORT,$METADATA" >> "$OUTPUT_FILE"
+METADATA=$(IFS=','; printf "%s" "${LINE[*]:1}")
+printf "%s,%s,%s,%s,%s\n" "$SCALAR_NAME" "$SHORT_NII" "$SHORT_MASK" "$SUBJECT_SHORT" "$METADATA" >> "$OUTPUT_FILE"
   else
     echo "WARNING: Missing Nifit or mask file for $SUBJECT_SHORT"
   fi

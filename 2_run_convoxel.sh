@@ -30,16 +30,18 @@ if [[ -z "$COHORT_FILE" ]]; then
 usage
   exit 1
 fi
+echo "Your cohort file: $COHORT_FILE"
 
 if [[ -z "$RELATIVE_ROOT" ]]; then
   echo "ERROR: Relative root directory must be specified with -r option."
 usage
   exit 1
 fi
-
+echo "Your root folder: $RELATIVE_ROOT"
 # Construct the full path to the group mask
 GROUP_MASK="${RELATIVE_ROOT}/group_mask.nii.gz"
 
+echo "Group mask is located at: $GROUP_MASK"
 
 if [[ ! -f "$COHORT_FILE" ]]; then
   echo "ERROR: Cohort file not found: $COHORT_FILE"
@@ -64,40 +66,38 @@ echo "Group mask dimension: $GROUP_DIM"
 
 # Check each row in the cohort for existence and matching dimensions
 echo "Validating cohort files..."
-tail -n +2 "$COHORT_FILE" | while IFS=',' read -r SCALAR FILE MASK_FILE SUBJECT_ID REST; do
+while IFS=',' read -r SCALAR FILE MASK_FILE SUBJECT_ID REST; do
+  echo "---"
+  echo "[DEBUG] SCALAR=$SCALAR, FILE=$FILE, MASK_FILE=$MASK_FILE, SUBJECT_ID=$SUBJECT_ID"
   FULL_OD="${RELATIVE_ROOT}/${FILE}"
   FULL_MASK="${RELATIVE_ROOT}/${MASK_FILE}"
+  echo "[CHECKPOINT] Checking files for $SUBJECT_ID"
+  echo "  OD: $FULL_OD"
+  echo "  MASK: $FULL_MASK"
 
-  # Check files exist
   if [[ ! -f "$FULL_OD" ]]; then
-    echo "ERROR: Missing source file: $FULL_OD"
+    echo "❌ ERROR: Missing source file: $FULL_OD"
     exit 1
   fi
   if [[ ! -f "$FULL_MASK" ]]; then
-    echo "ERROR: Missing mask file: $FULL_MASK"
+    echo "❌ ERROR: Missing mask file: $FULL_MASK"
     exit 1
   fi
 
-  # Check dimensions
   OD_DIM=$(mrinfo "$FULL_OD" -quiet -size | tr -d '\n')
   MASK_DIM=$(mrinfo "$FULL_MASK" -quiet -size | tr -d '\n')
 
-  if [[ "$OD_DIM" != "$GROUP_DIM" ]]; then
-    echo "ERROR: Dimension mismatch for OD file ($SUBJECT_ID)"
-    echo "  File: $FULL_OD"
-    echo "  File dim: $OD_DIM"
-    echo "  Group dim: $GROUP_DIM"
-    exit 1
-  fi
+  echo "[DEBUG] OD_DIM=$OD_DIM, MASK_DIM=$MASK_DIM"
 
-  if [[ "$MASK_DIM" != "$GROUP_DIM" ]]; then
-    echo "ERROR: Dimension mismatch for MASK file ($SUBJECT_ID)"
-    echo "  File: $FULL_MASK"
-    echo "  File dim: $MASK_DIM"
-    echo "  Group dim: $GROUP_DIM"
+  if [[ "$OD_DIM" != "$GROUP_DIM" ]]; then
+    echo "❌ ERROR: Dimension mismatch for OD file ($SUBJECT_ID)"
     exit 1
   fi
-done
+  if [[ "$MASK_DIM" != "$GROUP_DIM" ]]; then
+    echo "❌ ERROR: Dimension mismatch for MASK file ($SUBJECT_ID)"
+    exit 1
+  fi
+done < <(tail -n +2 "$COHORT_FILE")
 
 echo "All files validated successfully. Starting modelarray..."
 

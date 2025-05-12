@@ -13,10 +13,23 @@ COHORT_FILE=""
 RELATIVE_ROOT=""
 
 # Parse command-line options
-while getopts ":c:r:" opt; do
+#!/bin/bash
+
+# Define debug function early
+debug() {
+  if [ "$DEBUG" -eq 1 ]; then
+    echo -e "\033[1;36m[DEBUG] $*\033[0m"  # Optional: color for visibility
+  fi
+}
+
+DEBUG=0  # Default; gets overridden by -d flag
+
+
+while getopts ":c:r:d" opt; do
   case $opt in
     c) COHORT_FILE="$OPTARG" ;;
     r) RELATIVE_ROOT="$OPTARG" ;;
+    d) DEBUG=1 ;;  # Enable debug mode
     \?) echo "Invalid option -$OPTARG" >&2
         exit 1 ;;
     :) echo "Option -$OPTARG requires an argument." >&2
@@ -37,11 +50,11 @@ if [[ -z "$RELATIVE_ROOT" ]]; then
 usage
   exit 1
 fi
-echo "Your root folder: $RELATIVE_ROOT"
+debug "Your root folder: $RELATIVE_ROOT"
 # Construct the full path to the group mask
 GROUP_MASK="${RELATIVE_ROOT}/group_mask.nii.gz"
 
-echo "Group mask is located at: $GROUP_MASK"
+debug "Group mask is located at: $GROUP_MASK"
 
 if [[ ! -f "$COHORT_FILE" ]]; then
   echo "ERROR: Cohort file not found: $COHORT_FILE"
@@ -55,7 +68,8 @@ fi
 
 # Extract scalar name from first line (excluding header)
 SCALAR_NAME=$(tail -n +2 "$COHORT_FILE" | head -n 1 | cut -d',' -f1)
-OUTPUT_HDF5="${SCALAR_NAME}.h5"
+BASE_COHORT=$(basename "$COHORT_FILE" .csv)
+OUTPUT_HDF5="${BASE_COHORT}_${SCALAR_NAME}.h5"
 
 echo "Detected scalar: $SCALAR_NAME"
 echo "Output will be written to: $OUTPUT_HDF5"
@@ -67,13 +81,13 @@ echo "Group mask dimension: $GROUP_DIM"
 # Check each row in the cohort for existence and matching dimensions
 echo "Validating cohort files..."
 while IFS=',' read -r SCALAR FILE MASK_FILE SUBJECT_ID REST; do
-  echo "---"
-  echo "[DEBUG] SCALAR=$SCALAR, FILE=$FILE, MASK_FILE=$MASK_FILE, SUBJECT_ID=$SUBJECT_ID"
+  debug "---"
+  debug "[DEBUG] SCALAR=$SCALAR, FILE=$FILE, MASK_FILE=$MASK_FILE, SUBJECT_ID=$SUBJECT_ID"
   FULL_OD="${RELATIVE_ROOT}/${FILE}"
   FULL_MASK="${RELATIVE_ROOT}/${MASK_FILE}"
-  echo "[CHECKPOINT] Checking files for $SUBJECT_ID"
-  echo "  OD: $FULL_OD"
-  echo "  MASK: $FULL_MASK"
+  debug "[CHECKPOINT] Checking files for $SUBJECT_ID"
+  debug "  OD: $FULL_OD"
+  debug "  MASK: $FULL_MASK"
 
   if [[ ! -f "$FULL_OD" ]]; then
     echo "❌ ERROR: Missing source file: $FULL_OD"
@@ -87,7 +101,7 @@ while IFS=',' read -r SCALAR FILE MASK_FILE SUBJECT_ID REST; do
   OD_DIM=$(mrinfo "$FULL_OD" -quiet -size | tr -d '\n')
   MASK_DIM=$(mrinfo "$FULL_MASK" -quiet -size | tr -d '\n')
 
-  echo "[DEBUG] OD_DIM=$OD_DIM, MASK_DIM=$MASK_DIM"
+  debug "[DEBUG] OD_DIM=$OD_DIM, MASK_DIM=$MASK_DIM"
 
   if [[ "$OD_DIM" != "$GROUP_DIM" ]]; then
     echo "❌ ERROR: Dimension mismatch for OD file ($SUBJECT_ID)"

@@ -169,6 +169,12 @@ fi
 singularity run --cleanenv -B "$DATA_DIR:/data" \
   "$CONTAINER" Rscript /data/$(basename "$R_SCRIPT_PATH")
 
+# Check if the previous command succeeded
+if [ $? -ne 0 ]; then
+  echo "🛑 Model analysis failed. Skipping NIfTI writing step."
+  exit 1
+fi
+
 # Write results to NIfTI
 echo "📦 Writing output NIfTI files..."
 singularity run --cleanenv -B "$DATA_DIR:/data" \

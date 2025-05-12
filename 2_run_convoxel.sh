@@ -69,7 +69,7 @@ fi
 # Extract scalar name from first line (excluding header)
 SCALAR_NAME=$(tail -n +2 "$COHORT_FILE" | head -n 1 | cut -d',' -f1)
 BASE_COHORT=$(basename "$COHORT_FILE" .csv)
-OUTPUT_HDF5="${BASE_COHORT}_${SCALAR_NAME}.h5"
+OUTPUT_HDF5="${BASE_COHORT}.h5"
 
 echo "Detected scalar: $SCALAR_NAME"
 echo "Output will be written to: $OUTPUT_HDF5"

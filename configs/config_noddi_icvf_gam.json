@@ -1,0 +1,34 @@
+{
+  "_comment": "ModelArray GAM analysis — NODDI ICVF, longitudinal 3-group design",
+
+  "container":  "/data/local/container/modelarray/modelarray_confixel_0.1.5.sif",
+  "data_dir":   "/data/local/134_AF19/derivatives/modelarray/noddi",
+
+  "h5_file":    "cohort_icvf_dwimap.h5",
+  "csv_file":   "cohort_icvf_dwimap.csv",
+
+  "group_mask_file": "group_mask.nii.gz",
+  "output_dir":      "results/icvf_gam",
+  "output_ext":      "nii.gz",
+  "csv_summary_path": "results/icvf_gam/summary_icvf_gam.csv",
+
+  "model_type":  "gam",
+  "scaler_type": "icvf_dwimap",
+
+  "_formula_note": [
+    "delta_age: time from baseline (ses-1) in years, NOT demeaned (leave out of continuous_covariates)",
+    "group, participant, sex → renamed to group_F, participant_F, sex_F by the runner script",
+    "s(delta_age, by=group_F, k=3): group-specific smooth trajectory of ICVF over time",
+    "participant_F: fixed subject factor — absorbs between-subject variance (repeated measures)"
+  ],
+  "formula": "icvf_dwimap ~ s(delta_age, by=group, k=3) + group + participant + sex",
+
+  "continuous_covariates": [],
+  "categorical_variables": ["group", "participant", "sex"],
+
+  "num_subj_lthr_abs": 10,
+  "num_subj_lthr_rel": 0.1,
+  "full_outputs": true,
+  "n_cores": 4,
+  "analysis_name": "icvf_gam_group_trajectory"
+}

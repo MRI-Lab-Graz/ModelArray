@@ -115,7 +115,34 @@ done < <(tail -n +2 "$COHORT_FILE")
 
 echo "All files validated successfully. Starting modelarray..."
 
-singularity run --cleanenv -B "$RELATIVE_ROOT":"$RELATIVE_ROOT" \
+# Resolve symlinks in the cohort so Singularity can bind their real locations.
+# Collect real paths of all source files that live outside RELATIVE_ROOT.
+EXTRA_BIND=""
+REAL_PATHS=()
+while IFS=',' read -r _scalar FILE _rest; do
+  ABS="${RELATIVE_ROOT}/${FILE}"
+  REAL=$(realpath -m "$ABS" 2>/dev/null || echo "$ABS")
+  if [[ "$REAL" != "${RELATIVE_ROOT}"* ]]; then
+    REAL_PATHS+=("$REAL")
+  fi
+done < <(tail -n +2 "$COHORT_FILE")
+
+if [[ ${#REAL_PATHS[@]} -gt 0 ]]; then
+  # Find the longest common path prefix across all resolved paths
+  COMMON="${REAL_PATHS[0]%/*}"
+  for p in "${REAL_PATHS[@]}"; do
+    while [[ "${p#${COMMON}}" == "${p}" ]]; do
+      COMMON="${COMMON%/*}"
+      [[ -z "$COMMON" ]] && COMMON="/" && break
+    done
+  done
+  EXTRA_BIND="-B ${COMMON}:${COMMON}"
+  echo "Extra bind mount (for symlinked data): $COMMON"
+fi
+
+singularity run --cleanenv \
+  -B "$RELATIVE_ROOT":"$RELATIVE_ROOT" \
+  $EXTRA_BIND \
   /data/local/container/modelarray/modelarray_confixel_0.1.5.sif \
   convoxel \
     --group-mask-file "$GROUP_MASK" \

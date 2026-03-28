@@ -129,6 +129,12 @@ phenotypes\$${variable}_F <- factor(phenotypes\$${variable})
 EOF
 done
 fi
+
+# Always add a numeric participant index for random-effect smooth s(participant_idx, bs='re')
+cat >> "$R_SCRIPT_PATH" <<EOF
+# Numeric subject index for random-effect smooth (mgcv bs='re' requires numeric)
+phenotypes\$participant_idx <- as.integer(factor(phenotypes\$participant))
+EOF
 # Continue with the rest of the R script
 cat >> "$R_SCRIPT_PATH" <<EOF
 

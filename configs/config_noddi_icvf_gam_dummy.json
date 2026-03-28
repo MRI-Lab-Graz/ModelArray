@@ -1,0 +1,34 @@
+{
+  "_comment": "ModelArray GAM — NODDI ICVF dummy run (10 subjects, random-effect formula)",
+
+  "container":  "/data/local/container/modelarray/modelarray_confixel_0.1.5.sif",
+  "data_dir":   "/data/local/134_AF19/derivatives/modelarray/noddi_dummy",
+
+  "h5_file":    "cohort_icvf_dwimap.h5",
+  "csv_file":   "cohort_icvf_dwimap.csv",
+
+  "group_mask_file": "group_mask.nii.gz",
+  "output_dir":      "results/icvf_gam",
+  "output_ext":      "nii.gz",
+  "csv_summary_path": "results/icvf_gam/summary_icvf_gam.csv",
+
+  "model_type":  "gam",
+  "scaler_type": "icvf_dwimap",
+
+  "_formula_note": [
+    "s(participant, bs='re'): random intercept per subject — far fewer parameters than fixed factor",
+    "participant must be numeric index for bs='re'; handled below via integer coding",
+    "group and sex as fixed factors",
+    "s(delta_age, by=group_F, k=3): group-specific time trajectory"
+  ],
+  "formula": "icvf_dwimap ~ s(delta_age, by=group_F, k=3) + group_F + sex_F + s(participant_idx, bs='re')",
+
+  "continuous_covariates": [],
+  "categorical_variables": ["group", "sex"],
+
+  "num_subj_lthr_abs": 3,
+  "num_subj_lthr_rel": 0.1,
+  "full_outputs": false,
+  "n_cores": 4,
+  "analysis_name": "icvf_gam_dummy"
+}

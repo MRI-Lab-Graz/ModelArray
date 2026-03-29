@@ -46,6 +46,8 @@ MODEL_TYPE=$(get_json_value '.model_type')  # New JSON tag for model type
 GROUP_MASK=$(get_json_value '.group_mask_file')
 OUTPUT_DIR=$(get_json_value '.output_dir')
 OUTPUT_EXT=$(get_json_value '.output_ext')
+# Ensure extension starts with a dot (nibabel requires e.g. ".nii.gz" not "nii.gz")
+[[ "$OUTPUT_EXT" != .* ]] && OUTPUT_EXT=".${OUTPUT_EXT}"
 
 # New fields for scaling and factorization
 CONTINUOUS_COVARIATES=$(get_json_value '.continuous_covariates | join(" ")')

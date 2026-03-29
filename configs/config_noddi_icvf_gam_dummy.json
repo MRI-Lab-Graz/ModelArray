@@ -9,7 +9,7 @@
 
   "group_mask_file": "group_mask.nii.gz",
   "output_dir":      "results/icvf_gam",
-  "output_ext":      "nii.gz",
+  "output_ext":      ".nii.gz",
   "csv_summary_path": "results/icvf_gam/summary_icvf_gam.csv",
 
   "model_type":  "gam",

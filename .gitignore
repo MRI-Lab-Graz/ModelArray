@@ -1,3 +1,4 @@
 cohort*
 /models
 /configs/*.json
+gui/.venv/

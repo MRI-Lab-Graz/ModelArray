@@ -1,0 +1,18 @@
+Command: bash /data/local/software/ModelArray/1_generate_cohort_longitudinal.sh -p /data/local/134_AF19/derivatives/modelarray/participants_longitudinal.tsv -d /data/local/134_AF19/derivatives/qsirecon/derivatives/mapcoeffs_dwimap -m /data/local/134_AF19/derivatives/modelarray/noddi_dummy_2mm/masks -o /data/local/134_AF19/derivatives/modelarray/mapmri
+Started: 2026-03-30T08:35:52.116540
+============================================================
+
+============================================================
+ Cohort file : /data/local/134_AF19/derivatives/modelarray/mapmri/cohort_mapcoeffs_dwimap.csv
+ Matched     : 304 rows
+ Missing     : 0 rows
+============================================================
+
+Preview (first 4 data rows):
+scalar_name,source_file,source_mask_file,subject_id,participant,session,delta_age,age_ses1,sex,height,weight,group
+mapcoeffs_dwimap,mapcoeffs_dwimap/sub-134001_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-mapmri_param-mapcoeffs_dwimap.nii.gz,mapcoeffs_dwimap/group_mask.nii.gz,sub-134001_ses-1,sub-134001,ses-1,0.0,27.802875,M,1.88,96,1
+mapcoeffs_dwimap,mapcoeffs_dwimap/sub-134001_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-mapmri_param-mapcoeffs_dwimap.nii.gz,mapcoeffs_dwimap/group_mask.nii.gz,sub-134001_ses-2,sub-134001,ses-2,0.057495,27.802875,M,1.88,96,1
+mapcoeffs_dwimap,mapcoeffs_dwimap/sub-134001_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-mapmri_param-mapcoeffs_dwimap.nii.gz,mapcoeffs_dwimap/group_mask.nii.gz,sub-134001_ses-3,sub-134001,ses-3,0.11499,27.802875,M,1.88,96,1
+mapcoeffs_dwimap,mapcoeffs_dwimap/sub-134002_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-mapmri_param-mapcoeffs_dwimap.nii.gz,mapcoeffs_dwimap/group_mask.nii.gz,sub-134002_ses-1,sub-134002,ses-1,0.0,32.542094,F,1.72,75,1
+
+[Finished 2026-03-30T08:36:03.836258  exit=0]

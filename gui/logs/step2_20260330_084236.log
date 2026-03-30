@@ -1,0 +1,702 @@
+Command: bash /data/local/software/ModelArray/2_run_convoxel.sh -c /data/local/134_AF19/derivatives/modelarray/noddi_2mm/cohort_icvf_dwimap.csv -r /data/local/134_AF19/derivatives/modelarray/noddi_2mm -d
+Started: 2026-03-30T08:42:36.436280
+============================================================
+
+Your cohort file: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/cohort_icvf_dwimap.csv
+[1;36m[DEBUG] Your root folder: /data/local/134_AF19/derivatives/modelarray/noddi_2mm[0m
+[1;36m[DEBUG] Group mask is located at: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/group_mask.nii.gz[0m
+Detected scalar: icvf_dwimap
+Output will be written to: cohort_icvf_dwimap.h5
+Group mask dimension: 97 115 97
+Validating cohort files...
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134001_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134001_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134001_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134001_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134001_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134001_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134001_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134001_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134001_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134001_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134001_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134001_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134002_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134002_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134002_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134002_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134002_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134002_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134002_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134002_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134002_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134002_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134002_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134002_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134003_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134003_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134003_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134003_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134003_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134003_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134003_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134003_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134003_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134003_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134003_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134003_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134004_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134004_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134004_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134004_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134004_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134004_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134004_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134004_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134004_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134004_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134004_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134004_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134005_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134005_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134005_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134005_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134005_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134005_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134005_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134005_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134006_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134006_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134006_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134006_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134006_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134006_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134006_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134006_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134006_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134006_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134006_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134006_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134007_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134007_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134007_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134007_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134007_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134007_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134007_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134007_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134007_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134007_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134007_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134007_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134008_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134008_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134008_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134008_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134008_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134008_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134008_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134008_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134008_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134008_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134008_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134008_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134009_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134009_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134009_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134009_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134009_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134009_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134009_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134009_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134009_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134009_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134009_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134009_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134010_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134010_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134010_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134010_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134010_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134010_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134010_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134010_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134010_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134010_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134010_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134010_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134011_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134011_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134011_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134011_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134011_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134011_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134011_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134011_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134011_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134011_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134011_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134011_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134012_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134012_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134012_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134012_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134012_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134012_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134012_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134012_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134013_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134013_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134013_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134013_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134014_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134014_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134014_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134014_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134014_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134014_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134014_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134014_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134014_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134014_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134014_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134014_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134015_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134015_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134015_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134015_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134015_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134015_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134015_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134015_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134015_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134015_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134015_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134015_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134016_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134016_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134016_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134016_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134016_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134016_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134016_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134016_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134016_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134016_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134016_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134016_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134017_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134017_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134017_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134017_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134017_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134017_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134017_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134017_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134017_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134017_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134017_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134017_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134018_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134018_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134018_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134018_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134018_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134018_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134018_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134018_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134018_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134018_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134018_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134018_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134019_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134019_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134019_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134019_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134019_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134019_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134019_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134019_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134019_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134019_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134019_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134019_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134020_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134020_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134020_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134020_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134020_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134020_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134020_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134020_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134020_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134020_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134020_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134020_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134022_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134022_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134022_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134022_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134023_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134023_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134023_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134023_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134023_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134023_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134023_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134023_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134023_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134023_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134023_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134023_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134024_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134024_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134024_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134024_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134024_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134024_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134024_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134024_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134024_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134024_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134024_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134024_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134025_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134025_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134025_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134025_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134025_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134025_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134025_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134025_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134025_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134025_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134025_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134025_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134026_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134026_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134026_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134026_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134026_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134026_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134026_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134026_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134027_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134027_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134027_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134027_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134027_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134027_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134027_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134027_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134027_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134027_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134027_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134027_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134028_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134028_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134028_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134028_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134028_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134028_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134028_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134028_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134028_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134028_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134028_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134028_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134029_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134029_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134029_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134029_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134029_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134029_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134029_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134029_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134029_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134029_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134029_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134029_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134030_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134030_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134030_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134030_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134031_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134031_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134031_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134031_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134031_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134031_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134031_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134031_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134031_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134031_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134031_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134031_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134032_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134032_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134032_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134032_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134032_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134032_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134032_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134032_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134032_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134032_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134032_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134032_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134033_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134033_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134033_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134033_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134033_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134033_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134033_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134033_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134033_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134033_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134033_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134033_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134034_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134034_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134034_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134034_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134034_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134034_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134034_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134034_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134035_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134035_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134035_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134035_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134035_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134035_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134035_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134035_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134036_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134036_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134036_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134036_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134036_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134036_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134036_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134036_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134036_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134036_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134036_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134036_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134037_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134037_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134037_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134037_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134037_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134037_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134037_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134037_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134038_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134038_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134038_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134038_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134038_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134038_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134038_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134038_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134038_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134038_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134038_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134038_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134039_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134039_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134039_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134039_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134039_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134039_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134039_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134039_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134039_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134039_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134039_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134039_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134040_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134040_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134040_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134040_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134040_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134040_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134040_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134040_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134040_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134040_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134040_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134040_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134076_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134076_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134076_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134076_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134076_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134076_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134076_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134076_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134076_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134076_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134076_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134076_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134121_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134121_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134121_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134121_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134121_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134121_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134121_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134121_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134121_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134121_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134121_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134121_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134117_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134117_ses-1[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134117_ses-1[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134117_ses-1_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134117_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134117_ses-2[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134117_ses-2[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134117_ses-2_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+[1;36m[DEBUG] ---[0m
+[1;36m[DEBUG] [DEBUG] SCALAR=icvf_dwimap, FILE=icvf_dwimap/sub-134117_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz, MASK_FILE=icvf_dwimap/group_mask.nii.gz, SUBJECT_ID=sub-134117_ses-3[0m
+[1;36m[DEBUG] [CHECKPOINT] Checking files for sub-134117_ses-3[0m
+[1;36m[DEBUG]   OD: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/sub-134117_ses-3_acq-1k3k64d_space-MNI152NLin2009cAsym_res-02_model-noddi_param-icvf_dwimap.nii.gz[0m
+[1;36m[DEBUG]   MASK: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/icvf_dwimap/group_mask.nii.gz[0m
+[1;36m[DEBUG] [DEBUG] OD_DIM=97 115 97, MASK_DIM=97 115 97[0m
+All files validated successfully. Starting modelarray...
+Extra bind mount (for symlinked data): /data/local/134_AF19/derivatives/qsirecon/derivatives/qsirecon-NODDI
+Extracting NIfTI data...
+  0%|          | 0/114 [00:00<?, ?it/s]  2%|▏         | 2/114 [00:00<00:08, 13.36it/s]  4%|▎         | 4/114 [00:00<00:07, 15.51it/s]  5%|▌         | 6/114 [00:00<00:06, 16.85it/s]  7%|▋         | 8/114 [00:00<00:06, 17.37it/s]  9%|▉         | 10/114 [00:00<00:05, 17.52it/s] 11%|█         | 12/114 [00:00<00:05, 17.98it/s] 12%|█▏        | 14/114 [00:00<00:05, 17.93it/s] 14%|█▍        | 16/114 [00:00<00:05, 17.89it/s] 16%|█▌        | 18/114 [00:01<00:05, 18.00it/s] 18%|█▊        | 20/114 [00:01<00:05, 18.14it/s] 19%|█▉        | 22/114 [00:01<00:05, 18.03it/s] 21%|██        | 24/114 [00:01<00:04, 18.10it/s] 23%|██▎       | 26/114 [00:01<00:04, 18.07it/s] 25%|██▍       | 28/114 [00:01<00:04, 18.01it/s] 26%|██▋       | 30/114 [00:01<00:04, 18.05it/s] 28%|██▊       | 32/114 [00:01<00:04, 18.12it/s] 30%|██▉       | 34/114 [00:01<00:04, 18.31it/s] 32%|███▏      | 36/114 [00:02<00:04, 18.32it/s] 33%|███▎      | 38/114 [00:02<00:04, 18.33it/s] 35%|███▌      | 40/114 [00:02<00:04, 18.19it/s] 37%|███▋      | 42/114 [00:02<00:03, 18.33it/s] 39%|███▊      | 44/114 [00:02<00:03, 18.11it/s] 40%|████      | 46/114 [00:02<00:03, 18.13it/s] 42%|████▏     | 48/114 [00:02<00:03, 18.17it/s] 44%|████▍     | 50/114 [00:02<00:03, 18.35it/s] 46%|████▌     | 52/114 [00:02<00:03, 18.49it/s] 47%|████▋     | 54/114 [00:03<00:03, 18.60it/s] 49%|████▉     | 56/114 [00:03<00:03, 18.64it/s] 51%|█████     | 58/114 [00:03<00:02, 18.73it/s] 53%|█████▎    | 60/114 [00:03<00:02, 18.87it/s] 54%|█████▍    | 62/114 [00:03<00:02, 18.89it/s] 56%|█████▌    | 64/114 [00:03<00:02, 18.66it/s] 58%|█████▊    | 66/114 [00:03<00:02, 18.66it/s] 60%|█████▉    | 68/114 [00:03<00:02, 18.66it/s] 61%|██████▏   | 70/114 [00:03<00:02, 18.67it/s] 63%|██████▎   | 72/114 [00:03<00:02, 18.73it/s] 65%|██████▍   | 74/114 [00:04<00:02, 18.84it/s] 67%|██████▋   | 76/114 [00:04<00:02, 18.86it/s] 68%|██████▊   | 78/114 [00:04<00:01, 18.96it/s] 70%|███████   | 80/114 [00:04<00:01, 19.04it/s] 72%|███████▏  | 82/114 [00:04<00:01, 18.96it/s] 74%|███████▎  | 84/114 [00:04<00:01, 18.84it/s] 75%|███████▌  | 86/114 [00:04<00:01, 18.82it/s] 77%|███████▋  | 88/114 [00:04<00:01, 18.79it/s] 79%|███████▉  | 90/114 [00:04<00:01, 18.75it/s] 81%|████████  | 92/114 [00:05<00:01, 18.76it/s] 82%|████████▏ | 94/114 [00:05<00:01, 18.81it/s] 84%|████████▍ | 96/114 [00:05<00:00, 18.66it/s] 86%|████████▌ | 98/114 [00:05<00:00, 18.77it/s] 88%|████████▊ | 100/114 [00:05<00:00, 18.87it/s] 89%|████████▉ | 102/114 [00:05<00:00, 18.60it/s] 91%|█████████ | 104/114 [00:05<00:00, 18.53it/s] 93%|█████████▎| 106/114 [00:05<00:00, 18.56it/s] 95%|█████████▍| 108/114 [00:05<00:00, 17.83it/s] 96%|█████████▋| 110/114 [00:06<00:00, 17.22it/s] 98%|█████████▊| 112/114 [00:06<00:00, 17.72it/s]100%|██████████| 114/114 [00:06<00:00, 18.01it/s]100%|██████████| 114/114 [00:06<00:00, 18.29it/s]
+✅ Done: cohort_icvf_dwimap.h5 created
+
+[Finished 2026-03-30T08:42:49.532463  exit=0]

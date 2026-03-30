@@ -144,6 +144,21 @@ cat >> "$R_SCRIPT_PATH" <<EOF
 # Use rewritten formula
 formula <- as.formula("$FINAL_FORMULA")
 
+# ── Progress helpers ──────────────────────────────────────────────────────────
+ts <- function(msg) {
+  cat(sprintf("[%s] %s\n", format(Sys.time(), "%H:%M:%S"), msg))
+  flush.console()
+}
+
+n_elements <- nrow(rhdf5::h5read(h5_path, "scalars/${SCALER_TYPE}/values"))
+ts(sprintf("Starting ${MODEL_TYPE} on %s: %d elements, %d cores", "$SCALER_TYPE", n_elements, $N_CORES))
+
+t_start <- proc.time()
+
+# Heartbeat: print a timestamp every 30 s so you can tell it's still alive
+heartbeat <- parallel::mcparallel({
+  repeat { Sys.sleep(30); cat(sprintf("[%s] Still fitting...\n", format(Sys.time(), "%H:%M:%S"))); flush.console() }
+})
 
 mylm <- ModelArray.${MODEL_TYPE}(
   formula = formula,
@@ -154,10 +169,20 @@ mylm <- ModelArray.${MODEL_TYPE}(
   num.subj.lthr.rel = $NUM_REL,
   full.outputs = $FULL_OUTPUTS,
   n_cores = $N_CORES,
-  verbose = TRUE
+  verbose = TRUE,
+  pbar = TRUE
 )
 
+tools::pskill(heartbeat\$pid, signal = 15L)  # stop heartbeat
+
+elapsed <- proc.time() - t_start
+ts(sprintf("Fitting done in %.1f min (%.0f elements/sec)",
+           elapsed["elapsed"] / 60,
+           n_elements / elapsed["elapsed"]))
+
+ts("Writing results to HDF5...")
 writeResults(h5_path, df.output = mylm, analysis_name = "$ANALYSIS_NAME")
+ts("Done writing HDF5.")
 
 summary_df <- summary(mylm)
 write.csv(summary_df, file = "/data/$CSV_SUMMARY", row.names = FALSE)
@@ -173,13 +198,20 @@ if [ "$TEST_MODE" = true ]; then
     exit 0
 fi
 
-# Run the model analysis
-singularity run --cleanenv -B "$DATA_DIR:/data" \
-  "$CONTAINER" Rscript /data/$(basename "$R_SCRIPT_PATH")
+# Ensure output directories exist before R tries to write into them
+mkdir -p "$DATA_DIR/$OUTPUT_DIR"
+mkdir -p "$(dirname "$DATA_DIR/$CSV_SUMMARY")"
 
-# Check if the previous command succeeded
-if [ $? -ne 0 ]; then
-  echo "🛑 Model analysis failed. Skipping NIfTI writing step."
+# Log file — always written alongside the data; tail -f it in another terminal
+LOG_FILE="$DATA_DIR/modelarray_run_$(date +%Y%m%d_%H%M%S).log"
+echo "📋 Log file: $LOG_FILE  (tail -f $LOG_FILE)"
+
+# Run the model analysis — tee output to log and terminal simultaneously
+singularity run --cleanenv -B "$DATA_DIR:/data" \
+  "$CONTAINER" Rscript /data/$(basename "$R_SCRIPT_PATH") 2>&1 | tee "$LOG_FILE"
+
+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+  echo "🛑 Model analysis failed. See log: $LOG_FILE"
   exit 1
 fi
 
@@ -193,6 +225,6 @@ singularity run --cleanenv -B "$DATA_DIR:/data" \
   --analysis-name "$ANALYSIS_NAME" \
   --input-hdf5 "/data/$H5_FILE" \
   --output-dir "/data/$OUTPUT_DIR" \
-  --output-ext "$OUTPUT_EXT"
+  --output-ext "$OUTPUT_EXT" 2>&1 | tee -a "$LOG_FILE"
 
-echo "✅ All steps completed successfully."
+echo "✅ All steps completed successfully. Full log: $LOG_FILE"

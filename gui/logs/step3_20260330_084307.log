@@ -1,0 +1,71 @@
+Command: bash /data/local/software/ModelArray/3_run_model.sh /data/local/software/ModelArray/configs/config_noddi_icvf_gam_2mm.json --test
+Started: 2026-03-30T08:43:07.633697
+============================================================
+
+✅ R script generated at: /data/local/134_AF19/derivatives/modelarray/noddi_2mm/generated_script.R
+=== TEST MODE: Showing R script content ===
+library(ModelArray)
+
+h5_path <- "/data/cohort_icvf_dwimap.h5"
+csv_path <- "/data/cohort_icvf_dwimap.csv"
+modelarray <- ModelArray(h5_path, scalar_types = c("icvf_dwimap"))
+phenotypes <- read.csv(csv_path)
+
+# Demean and center continuous covariates
+
+# Convert categorical variables to factors
+phenotypes$group_F <- factor(phenotypes$group)
+phenotypes$participant_F <- factor(phenotypes$participant)
+phenotypes$sex_F <- factor(phenotypes$sex)
+# Numeric subject index for random-effect smooth (mgcv bs='re' requires numeric)
+phenotypes$participant_idx <- as.integer(factor(phenotypes$participant))
+
+
+# Use rewritten formula
+formula <- as.formula("icvf_dwimap ~ s(delta_age, by=group_F, k=3) + group_F + participant_F + sex_F")
+
+# ── Progress helpers ──────────────────────────────────────────────────────────
+ts <- function(msg) {
+  cat(sprintf("[%s] %s\n", format(Sys.time(), "%H:%M:%S"), msg))
+  flush.console()
+}
+
+n_elements <- nrow(rhdf5::h5read(h5_path, "scalars/icvf_dwimap/values"))
+ts(sprintf("Starting gam on %s: %d elements, %d cores", "icvf_dwimap", n_elements, 4))
+
+t_start <- proc.time()
+
+# Heartbeat: print a timestamp every 30 s so you can tell it's still alive
+heartbeat <- parallel::mcparallel({
+  repeat { Sys.sleep(30); cat(sprintf("[%s] Still fitting...\n", format(Sys.time(), "%H:%M:%S"))); flush.console() }
+})
+
+mylm <- ModelArray.gam(
+  formula = formula,
+  data = modelarray,
+  phenotypes = phenotypes,
+  scalar = "icvf_dwimap",
+  num.subj.lthr.abs = 10,
+  num.subj.lthr.rel = 0.1,
+  full.outputs = TRUE,
+  n_cores = 4,
+  verbose = TRUE,
+  pbar = TRUE
+)
+
+tools::pskill(heartbeat$pid, signal = 15L)  # stop heartbeat
+
+elapsed <- proc.time() - t_start
+ts(sprintf("Fitting done in %.1f min (%.0f elements/sec)",
+           elapsed["elapsed"] / 60,
+           n_elements / elapsed["elapsed"]))
+
+ts("Writing results to HDF5...")
+writeResults(h5_path, df.output = mylm, analysis_name = "icvf_gam_group_trajectory_2mm")
+ts("Done writing HDF5.")
+
+summary_df <- summary(mylm)
+write.csv(summary_df, file = "/data/results/icvf_gam_2mm/summary_icvf_gam_2mm.csv", row.names = FALSE)
+print(colnames(summary_df))
+
+[Finished 2026-03-30T08:43:08.258712  exit=0]

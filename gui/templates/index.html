@@ -346,7 +346,8 @@
                   <label class="form-label">Participants TSV <span class="text-danger">*</span></label>
                   <div class="input-group input-group-sm">
                     <input id="s1-participants" type="text" class="form-control"
-                           placeholder="/data/local/.../participants_longitudinal.tsv">
+                           placeholder="/data/local/.../participants_longitudinal.tsv"
+                           oninput="schedAutoLoadTSV()">
                     <button class="btn btn-outline-secondary btn-browse"
                             title="Browse for TSV"
                             onclick="openPicker('s1-participants','file','Participants TSV',['.tsv'])">
@@ -359,7 +360,8 @@
                     <small class="text-muted">folder of MNI-registered NIfTI maps for one scalar (e.g. modelarray/noddi/icvf_dwimap)</small></label>
                   <div class="input-group input-group-sm">
                     <input id="s1-nii-folder" type="text" class="form-control"
-                           placeholder="/data/local/.../modelarray/noddi/icvf_dwimap">
+                           placeholder="/data/local/.../modelarray/noddi/icvf_dwimap"
+                           oninput="s1InferCohortPath()">
                     <button class="btn btn-outline-secondary btn-browse"
                             title="Browse"
                             onclick="openPicker('s1-nii-folder','dir','NIfTI scalar folder')">
@@ -385,7 +387,8 @@
                     <small class="text-muted">where cohort CSV will be written (e.g. modelarray/noddi — same level as scalar sub-folders)</small></label>
                   <div class="input-group input-group-sm">
                     <input id="s1-output-folder" type="text" class="form-control"
-                           placeholder="/data/local/.../derivatives/modelarray/noddi">
+                           placeholder="/data/local/.../derivatives/modelarray/noddi"
+                           oninput="s1InferCohortPath()">
                     <button class="btn btn-outline-secondary btn-browse"
                             title="Browse"
                             onclick="openPicker('s1-output-folder','dir','Output folder')">
@@ -425,7 +428,8 @@
                   <label class="form-label">Cohort CSV <span class="text-danger">*</span></label>
                   <div class="input-group input-group-sm">
                     <input id="s2-cohort" type="text" class="form-control"
-                           placeholder="/data/local/.../modelarray/noddi/cohort_icvf_dwimap.csv">
+                           placeholder="/data/local/.../modelarray/noddi/cohort_icvf_dwimap.csv"
+                           oninput="s2AutoFill()">
                     <button class="btn btn-outline-secondary btn-browse"
                             title="Browse for CSV"
                             onclick="openPicker('s2-cohort','file','Cohort CSV',['.csv'])">
@@ -434,14 +438,14 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Root directory <span class="text-danger">*</span></label>
+                  <label class="form-label">Group mask file <small class="text-muted">(auto-detected from cohort directory)</small></label>
                   <div class="input-group input-group-sm">
-                    <input id="s2-root" type="text" class="form-control"
-                           placeholder="/data/local/.../modelarray/noddi">
+                    <input id="s2-group-mask" type="text" class="form-control"
+                           placeholder="auto: &lt;cohort_dir&gt;/group_mask.nii.gz">
                     <button class="btn btn-outline-secondary btn-browse"
-                            title="Browse"
-                            onclick="openPicker('s2-root','dir','Root directory')">
-                      <i class="bi bi-folder2"></i>
+                            title="Browse for group mask"
+                            onclick="openPicker('s2-group-mask','file','Group mask',['.nii.gz','.nii'])">
+                      <i class="bi bi-file-earmark"></i>
                     </button>
                   </div>
                 </div>
@@ -482,9 +486,8 @@
                           onchange="updateStep3JsonPreview()">
                     <option value="gam">gam — Generalized Additive Model</option>
                     <option value="lm">lm — Linear Model</option>
-                    <option value="lmer">lmer — Linear Mixed Effects</option>
-                    <option value="gamm4">gamm4 — Generalized Additive Mixed</option>
                   </select>
+                  <small class="text-muted">lmer / gamm4 not yet supported by the run script</small>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Outcome variable (scaler) <span class="text-danger">*</span>
@@ -743,7 +746,7 @@ const PROJECT_FIELDS = [
   "s1-participants", "s1-nii-folder", "s1-mask-folder",
   "s1-output-folder", "s1-subgroup",
   // Step 2
-  "s2-cohort", "s2-root",
+  "s2-cohort", "s2-group-mask",
   // Step 3
   "s3-model-type", "s3-scaler", "s3-analysis-name", "s3-formula",
   "s3-cat-vars", "s3-cont-vars",
@@ -828,7 +831,9 @@ async function loadProject() {
   } catch(e) { showToast("Load error: " + e, "danger"); }
 }
 
-
+// ─── File Picker ──────────────────────────────────────────────────────────────
+async function pickerMkdir() {
+  const name = prompt("New folder name:", "");
   if (!name || !name.trim()) return;
   try {
     const r = await fetch("/mkdir", {
@@ -958,7 +963,7 @@ function schedPropagateDir() {
 function propagateProjectDir() {
   const d = v("proj-output-dir");
   if (!d) return;
-  ["s0-modelarray-dir", "s1-output-folder", "s2-root"].forEach(function(id) {
+  ["s0-modelarray-dir", "s1-output-folder"].forEach(function(id) {
     const el = document.getElementById(id);
     if (el && !el.value.trim()) el.value = d;
   });
@@ -1054,10 +1059,10 @@ function autoFillSteps(cfg) {
   if (!cfg) return;
   const d = cfg.data_dir || "";
   const c = cfg.csv_file || "";
-  if (d && !document.getElementById("s2-root").value)
-    document.getElementById("s2-root").value = d;
-  if (d && c && !document.getElementById("s2-cohort").value)
+  if (d && c && !document.getElementById("s2-cohort").value) {
     document.getElementById("s2-cohort").value = d + "/" + c;
+    s2AutoFill(); // cascade derived fields to Step 3
+  }
 
   // Populate Step 3 form fields from loaded config
   if (cfg.formula)      document.getElementById("s3-formula").value = cfg.formula;
@@ -1104,9 +1109,23 @@ function formatJson() {
 // ─── Step 3: Statistics / Formula builder ─────────────────────────────────────
 let _s3vars = [];
 
-async function loadVariablesFromTSV() {
+// ─── Auto-load TSV when path is typed/pasted ──────────────────────────────────
+let _tsvAutoTimer = null;
+function schedAutoLoadTSV() {
+  clearTimeout(_tsvAutoTimer);
+  _tsvAutoTimer = setTimeout(function() {
+    const tsv = v("s1-participants");
+    // Only auto-trigger for plausible paths that end in .tsv
+    if (tsv && tsv.endsWith(".tsv")) loadVariablesFromTSV(true);
+  }, 1200);
+}
+
+async function loadVariablesFromTSV(silent) {
   const tsv = v("s1-participants");
-  if (!tsv) { showToast("Enter Participants TSV path in Step 1 first.", "warning"); return; }
+  if (!tsv) {
+    if (!silent) showToast("Enter Participants TSV path in Step 1 first.", "warning");
+    return;
+  }
   try {
     const r = await fetch("/parse_tsv", {
       method: "POST",
@@ -1190,8 +1209,18 @@ function buildStep3Config() {
   const contVars = v("s3-cont-vars")
     ? v("s3-cont-vars").split(",").map(x => x.trim()).filter(Boolean) : [];
 
-  const outputDir = v("s3-output-dir") || (dataDir + "/results/" + analysisName);
-  const maskPath  = v("s3-mask-file")  || (dataDir + "/group_mask.nii.gz");
+  // ── Paths: 3_run_model.sh prefixes all relative paths with data_dir. ──────
+  // Store group_mask_file and output_dir relative to data_dir when they sit
+  // inside it; the script does $DATA_DIR/$GROUP_MASK / $DATA_DIR/$OUTPUT_DIR.
+  const toRel = function(absPath) {
+    if (dataDir && absPath.startsWith(dataDir + "/"))
+      return absPath.slice(dataDir.length + 1);
+    return absPath; // already relative, or outside data_dir
+  };
+
+  const maskPathAbs   = v("s3-mask-file")  || (dataDir + "/group_mask.nii.gz");
+  const outputDirAbs  = v("s3-output-dir") || (dataDir + "/results/" + analysisName);
+  const csvSummAbs    = outputDirAbs + "/summary_" + analysisName + ".csv";
 
   return {
     "_comment":   "ModelArray config \u2014 auto-generated by GUI",
@@ -1200,10 +1229,10 @@ function buildStep3Config() {
     "data_dir":   dataDir,
     "h5_file":    h5file,
     "csv_file":   csvFile,
-    "group_mask_file": maskPath,
-    "output_dir": outputDir,
+    "group_mask_file": toRel(maskPathAbs),
+    "output_dir": toRel(outputDirAbs),
     "output_ext": ".nii.gz",
-    "csv_summary_path": outputDir + "/summary_" + analysisName + ".csv",
+    "csv_summary_path": toRel(csvSummAbs),
     "model_type": modelType,
     "scaler_type": scaler,
     "formula":    formula,
@@ -1220,6 +1249,57 @@ function updateStep3JsonPreview() {
   const el = document.getElementById("s3-json-text");
   if (el) {
     try { el.value = JSON.stringify(buildStep3Config(), null, 2); } catch {}
+  }
+}
+
+// ─── Step 1 → Step 2 auto-fill ────────────────────────────────────────────────
+/** Infer cohort CSV path from Step 1 output folder + scalar folder name. */
+function s1InferCohortPath() {
+  const outputFolder = v("s1-output-folder");
+  const niiFolder    = v("s1-nii-folder");
+  if (!outputFolder || !niiFolder) return;
+  // Scalar name = last non-empty path component of the NIfTI folder
+  const scalar = niiFolder.replace(/\/$/, "").split("/").filter(Boolean).pop();
+  if (!scalar) return;
+  const cohortPath = outputFolder.replace(/\/$/, "") + "/cohort_" + scalar + ".csv";
+  const cohortEl = document.getElementById("s2-cohort");
+  if (cohortEl && !cohortEl.value.trim()) {
+    cohortEl.value = cohortPath;
+    s2AutoFill(); // cascade to Step 3
+  }
+}
+
+// ─── Step 2 helpers ───────────────────────────────────────────────────────────
+/** Called whenever the Step 2 cohort CSV path changes. Updates mask placeholder
+ *  and auto-fills Step 3 HDF5 / mask / output-dir when those fields are empty. */
+function s2AutoFill() {
+  const cohort = (v("s2-cohort") || "").trim();
+  const maskEl = document.getElementById("s2-group-mask");
+  if (!maskEl) return;
+
+  if (!cohort) {
+    maskEl.placeholder = "auto: <cohort_dir>/group_mask.nii.gz";
+    return;
+  }
+
+  const dir   = cohort.includes("/") ? cohort.substring(0, cohort.lastIndexOf("/")) : ".";
+  const base  = cohort.split("/").pop();
+  const autoMask = dir + "/group_mask.nii.gz";
+  maskEl.placeholder = autoMask + "  (auto-detected by script)";
+
+  // ── Step 3: HDF5 (same dir, .h5 extension) ──────────────────────────────
+  const h5Path = dir + "/" + base.replace(/\.csv$/i, ".h5");
+  const h5El   = document.getElementById("s3-h5-file");
+  if (h5El && !h5El.value.trim()) {
+    h5El.value = h5Path;
+    updateStep3JsonPreview();
+  }
+
+  // ── Step 3: group mask ────────────────────────────────────────────────────
+  const s3MaskEl = document.getElementById("s3-mask-file");
+  if (s3MaskEl && !s3MaskEl.value.trim()) {
+    s3MaskEl.value = autoMask;
+    updateStep3JsonPreview();
   }
 }
 
@@ -1254,11 +1334,11 @@ async function runStep(step) {
   } else if (step === "2") {
     args = {
       cohort_file: v("s2-cohort"),
-      root_dir:    v("s2-root"),
+      group_mask:  v("s2-group-mask"),
       debug:       document.getElementById("s2-debug").checked
     };
-    if (!args.cohort_file || !args.root_dir) {
-      showToast("Cohort CSV and root directory are required.", "danger"); return;
+    if (!args.cohort_file) {
+      showToast("Cohort CSV is required.", "danger"); return;
     }
   } else if (step === "3") {
     const cfg = buildStep3Config();

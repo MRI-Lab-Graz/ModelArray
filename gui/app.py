@@ -323,10 +323,12 @@ def run_step():
     elif step == "2":
         cmd = ["bash", str(SCRIPTS_DIR / "2_run_convoxel.sh")]
         cohort = args.get("cohort_file", "").strip()
-        root = args.get("root_dir", "").strip()
-        if not cohort or not root:
-            return jsonify({"error": "Cohort CSV (-c) and root directory (-r) are required for Step 2"}), 400
-        cmd += ["-c", cohort, "-r", root]
+        if not cohort:
+            return jsonify({"error": "Cohort CSV (-c) is required for Step 2"}), 400
+        cmd += ["-c", cohort]
+        group_mask = args.get("group_mask", "").strip()
+        if group_mask:
+            cmd += ["-g", group_mask]
         if args.get("debug"):
             cmd += ["-d"]
 

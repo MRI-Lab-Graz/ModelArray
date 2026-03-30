@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
- echo " Usage: $0 -c cohort_ISOVF.csv -r /data/study"
+ echo " Usage: $0 -c cohort_ISOVF.csv [-g /path/to/group_mask.nii.gz]"
  exit 1
 }
 
@@ -10,7 +10,7 @@ set -o pipefail
 
 # Initialize variables
 COHORT_FILE=""
-RELATIVE_ROOT=""
+GROUP_MASK_ARG=""
 
 # Parse command-line options
 #!/bin/bash
@@ -25,10 +25,10 @@ debug() {
 DEBUG=0  # Default; gets overridden by -d flag
 
 
-while getopts ":c:r:d" opt; do
+while getopts ":c:g:d" opt; do
   case $opt in
     c) COHORT_FILE="$OPTARG" ;;
-    r) RELATIVE_ROOT="$OPTARG" ;;
+    g) GROUP_MASK_ARG="$OPTARG" ;;
     d) DEBUG=1 ;;  # Enable debug mode
     \?) echo "Invalid option -$OPTARG" >&2
         exit 1 ;;
@@ -45,15 +45,15 @@ usage
 fi
 echo "Your cohort file: $COHORT_FILE"
 
-if [[ -z "$RELATIVE_ROOT" ]]; then
-  echo "ERROR: Relative root directory must be specified with -r option."
-usage
-  exit 1
+# Derive group mask: use explicit -g if provided, otherwise auto-detect from cohort CSV directory
+if [[ -n "$GROUP_MASK_ARG" ]]; then
+  GROUP_MASK="$GROUP_MASK_ARG"
+else
+  GROUP_MASK="$(dirname "$COHORT_FILE")/group_mask.nii.gz"
 fi
-debug "Your root folder: $RELATIVE_ROOT"
-# Construct the full path to the group mask
-GROUP_MASK="${RELATIVE_ROOT}/group_mask.nii.gz"
+RELATIVE_ROOT=$(dirname "$GROUP_MASK")
 
+debug "Your root folder (auto-derived): $RELATIVE_ROOT"
 debug "Group mask is located at: $GROUP_MASK"
 
 if [[ ! -f "$COHORT_FILE" ]]; then
@@ -66,10 +66,12 @@ if [[ ! -f "$GROUP_MASK" ]]; then
   exit 1
 fi
 
-# Extract scalar name from first line (excluding header)
-SCALAR_NAME=$(tail -n +2 "$COHORT_FILE" | head -n 1 | cut -d',' -f1)
+# Extract scalar name from second line (first data row)
+# Use sed to avoid tail|head SIGPIPE with set -o pipefail
+SCALAR_NAME=$(sed -n '2p' "$COHORT_FILE" | cut -d',' -f1)
 BASE_COHORT=$(basename "$COHORT_FILE" .csv)
-OUTPUT_HDF5="${BASE_COHORT}.h5"
+# Write HDF5 next to the cohort CSV (use realpath so it works regardless of cwd)
+OUTPUT_HDF5="$(realpath "$(dirname "$COHORT_FILE")")/${BASE_COHORT}.h5"
 
 echo "Detected scalar: $SCALAR_NAME"
 echo "Output will be written to: $OUTPUT_HDF5"

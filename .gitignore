@@ -2,3 +2,5 @@ cohort*
 /models
 /configs/*.json
 gui/.venv/
+gui/logs
+gui/projects

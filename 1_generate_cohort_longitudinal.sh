@@ -131,7 +131,7 @@ while IFS=$'\t' read -r -a LINE; do
   fi
 
   SHORT_NII="${SCALAR_NAME}/$(basename "$NII_FILE")"
-  SHORT_MASK="${SCALAR_NAME}/$(basename "$MASK_FILE")"
+  SHORT_MASK=$(realpath --relative-to="$OUTPUT_FOLDER" "$MASK_FILE")
 
   METADATA=$(IFS=','; printf "%s" "${LINE[*]:1}")
   printf "%s,%s,%s,%s,%s\n" \

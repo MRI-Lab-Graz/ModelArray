@@ -36,7 +36,7 @@ fi
 echo ""
 echo "  ┌──────────────────────────────────────────┐"
 echo "  │         ModelArray GUI — starting        │"
-echo "  │   Open http://localhost:8080 in browser  │"
+echo "  │   Browser will open automatically        │"
 echo "  │   Press Ctrl+C to stop                   │"
 echo "  └──────────────────────────────────────────┘"
 echo ""

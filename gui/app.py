@@ -5,10 +5,19 @@ import json
 import os
 import signal
 import subprocess
+import sys
 import threading
 import time
+import webbrowser
 from datetime import datetime
 from pathlib import Path
+
+# ── Venv self-activation ───────────────────────────────────────────────────────
+# If invoked with the wrong Python (e.g. `python app.py` outside the venv),
+# re-exec transparently with the venv interpreter so imports always work.
+_VENV_PYTHON = Path(__file__).resolve().parent / ".venv" / "bin" / "python"
+if _VENV_PYTHON.exists() and Path(sys.executable).resolve() != _VENV_PYTHON.resolve():
+    os.execv(str(_VENV_PYTHON), [str(_VENV_PYTHON)] + sys.argv)
 
 try:
     from flask import Flask, Response, jsonify, render_template, request, stream_with_context
@@ -281,16 +290,18 @@ def run_step():
         cmd = ["bash", str(SCRIPTS_DIR / "0_register_acpc_to_mni.sh")]
         if args.get("input_dir"):
             cmd += ["-i", args["input_dir"]]
-        else:
-            return jsonify({"error": "Input directory (-i) is required for Step 0"}), 400
-        if args.get("qsiprep_dir"):
+        elif not args.get("link_source_dir"):
+            return jsonify({"error": "Input directory (-i) or Link-only source (-L) is required for Step 0"}), 400
+        if args.get("qsiprep_dir") and args.get("input_dir"):
             cmd += ["-q", args["qsiprep_dir"]]
-        else:
-            return jsonify({"error": "QSIPrep directory (-q) is required for Step 0"}), 400
         if args.get("output_dir"):
             cmd += ["-o", args["output_dir"]]
         if args.get("modelarray_dir"):
             cmd += ["-m", args["modelarray_dir"]]
+        if args.get("mask_dir"):
+            cmd += ["-b", args["mask_dir"]]
+        if args.get("link_source_dir"):
+            cmd += ["-L", args["link_source_dir"]]
         if args.get("resolution"):
             cmd += ["-s", args["resolution"]]
         if args.get("jobs"):
@@ -428,9 +439,17 @@ if __name__ == "__main__":
                 break
             port += 1
 
-    print(f"  ModelArray GUI  —  http://localhost:{port}")
+    url = f"http://localhost:{port}"
+    print(f"  ModelArray GUI  —  {url}")
     print(f"  Scripts dir:  {BASE_DIR}")
     print(f"  Logs dir:     {LOGS_DIR}")
     print("  Press Ctrl+C to quit\n")
+
+    # Open the browser automatically once the server is ready.
+    def _open_browser():
+        time.sleep(1.2)
+        webbrowser.open_new_tab(url)
+
+    threading.Thread(target=_open_browser, daemon=True).start()
 
     serve(app, host="0.0.0.0", port=port, threads=4)

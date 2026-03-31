@@ -24,7 +24,7 @@ usage() {
   cat <<EOF
 Usage: $0 -i INPUT_DIR [options]
 
-Required:
+Required (unless -L is used):
   -i  Input directory with ACPC-space scalar maps
         Expected layout: INPUT_DIR/sub-<id>/ses-<id>/[dwi/]*.nii.gz
 
@@ -35,6 +35,21 @@ Optional:
         scalar/parameter name, ready for 1_generate_cohort.sh:
         MODELARRAY_DIR/{param}/sub-xxx_ses-x_..._MNI_...nii.gz
         [default: not created]
+  -b  Brain mask output directory (QSIPrep mode):
+        Registers each subject's ACPC brain mask from QSIPrep's anat folder
+        (sub-XXX_space-ACPC_desc-brain_mask.nii.gz) to MNI space using the
+        same transform and resolution as the scalar maps.
+        NearestNeighbor interpolation is used (binary mask preserving).
+        Output: MASK_DIR/sub-XXX_space-MNI152NLin2009cAsym[_res-XX]_desc-brain_mask.nii.gz
+        [default: not created]
+  -L  Link-only source directory (no registration):
+        Recursively finds all MNI-space NIfTI files in SOURCE_DIR, extracts
+        the scalar/param name from the BIDS filename, and creates flat
+        symlinks in MODELARRAY_DIR/{scalar}/  — ready for Step 1.
+        Use this when scalars are already in MNI space but nested under
+        sub-/ses-/ subdirectories (e.g. a qsirecon derivatives folder).
+        Requires -m. -i, -q, and ANTs are NOT needed.
+        [default: not used]
   -q  QSIPrep derivatives directory  [default: ${QSIPREP_DIR}]
   -n  ANTs interpolation method      [default: Linear]
         (Linear | NearestNeighbor | BSpline | LanczosWindowedSinc | ...)
@@ -71,6 +86,10 @@ Examples:
   # Also build a ModelArray-ready flat tree (one subfolder per scalar/param):
   $0 -i /data/local/134_AF19/derivatives/qsirecon/derivatives/qsirecon-NODDI \\
      -m /data/local/134_AF19/derivatives/modelarray/noddi
+
+  # Link-only: data already MNI but nested — no registration needed:
+  $0 -L /data/local/134_AF19/derivatives/qsirecon/derivatives/qsirecon-NODDI \\
+     -m /data/local/134_AF19/derivatives/modelarray/noddi
 EOF
   exit 1
 }
@@ -79,17 +98,21 @@ EOF
 INPUT_DIR=""
 OUTPUT_DIR=""
 MODELARRAY_DIR=""
+MASK_DIR=""
+LINK_SOURCE_DIR=""
 INTERP="Linear"
 RES_TAG="01"
 JOBS=1
 FORCE=0
 
 # ── Parse arguments ────────────────────────────────────────────────────────────
-while getopts ":i:o:m:q:n:s:j:fh" opt; do
+while getopts ":i:o:m:b:L:q:n:s:j:fh" opt; do
   case $opt in
     i) INPUT_DIR="$OPTARG" ;;
     o) OUTPUT_DIR="$OPTARG" ;;
     m) MODELARRAY_DIR="$OPTARG" ;;
+    b) MASK_DIR="$OPTARG" ;;
+    L) LINK_SOURCE_DIR="$OPTARG" ;;
     q) QSIPREP_DIR="$OPTARG" ;;
     n) INTERP="$OPTARG" ;;
     s) RES_TAG="$OPTARG" ;;
@@ -102,10 +125,17 @@ while getopts ":i:o:m:q:n:s:j:fh" opt; do
 done
 
 # ── Validate required arguments ────────────────────────────────────────────────
-if [[ -z "$INPUT_DIR" ]]; then
-  echo "ERROR: -i is required." >&2
+if [[ -z "$INPUT_DIR" && -z "$LINK_SOURCE_DIR" ]]; then
+  echo "ERROR: -i (or -L for link-only mode) is required." >&2
   usage
 fi
+
+# ── Shared helper: extract scalar/param name from a NIfTI filename ──────────────
+if [[ -z "$INPUT_DIR" ]]; then
+  [[ -n "$MODELARRAY_DIR" ]] || { echo "ERROR: -L requires -m (ModelArray directory)." >&2; exit 1; }
+  [[ -d "$LINK_SOURCE_DIR" ]] || { echo "ERROR: Link source not found: $LINK_SOURCE_DIR" >&2; exit 1; }
+  mkdir -p "$MODELARRAY_DIR"
+else
 
 # Resolve template from res tag or float mm value
 RES_IS_FLOAT=0
@@ -148,6 +178,7 @@ command -v antsApplyTransforms >/dev/null 2>&1 \
 # If no output dir given, outputs go alongside inputs (OUTPUT_DIR stays empty)
 [[ -n "$OUTPUT_DIR" ]] && mkdir -p "$OUTPUT_DIR"
 [[ -n "$MODELARRAY_DIR" ]] && mkdir -p "$MODELARRAY_DIR"
+[[ -n "$MASK_DIR" ]] && mkdir -p "$MASK_DIR"
 
 # ── Summary ────────────────────────────────────────────────────────────────────
 echo "============================================================"
@@ -156,6 +187,7 @@ echo "============================================================"
 echo " Input dir  : $INPUT_DIR"
 echo " Output dir : $( [[ -n "$OUTPUT_DIR" ]] && echo "$OUTPUT_DIR" || echo "(same as input)")"
 echo " ModelArray : $( [[ -n "$MODELARRAY_DIR" ]] && echo "$MODELARRAY_DIR" || echo "(not requested)")"
+echo " Mask dir   : $( [[ -n "$MASK_DIR" ]] && echo "$MASK_DIR (QSIPrep brain masks → MNI)" || echo "(not requested)")"
 echo " QSIPrep    : $QSIPREP_DIR"
 echo " Template   : $TEMPLATE"
 if [[ $RES_IS_FLOAT -eq 1 ]]; then
@@ -376,14 +408,139 @@ if [[ -n "$MODELARRAY_DIR" ]]; then
   echo "  Scalars found   : $(ls "$MODELARRAY_DIR" | tr '\n' ' ')"
 fi
 
+# ── QSIPrep brain mask registration ───────────────────────────────────────────
+# When -b MASK_DIR is given, register each subject's ACPC brain mask from
+# QSIPrep's anat folder to MNI space using the same transform + resolution.
+# NearestNeighbor interpolation is used to preserve binary mask values.
+if [[ -n "$MASK_DIR" ]]; then
+  echo ""
+  echo "Registering QSIPrep brain masks → MNI: $MASK_DIR"
+
+  MASK_PROCESSED=0
+  MASK_SKIPPED=0
+  MASK_FAILED=0
+
+  # Build the MNI output filename for a mask (mirrors make_mni_filename but
+  # always produces a clean BIDS-style name regardless of input suffix).
+  make_mask_mni_filename() {
+    local subid="$1"
+    local res_tag_part
+    if [[ $RES_IS_FLOAT -eq 1 ]]; then
+      res_tag_part="_res-${RES_TAG}mm"
+    elif [[ "$RES_TAG" != "01" ]]; then
+      res_tag_part="_res-${RES_TAG}"
+    else
+      res_tag_part=""
+    fi
+    echo "${subid}_space-MNI152NLin2009cAsym${res_tag_part}_desc-brain_mask.nii.gz"
+  }
+
+  while IFS= read -r XFM_FILE; do
+    SUBID=$(echo "$XFM_FILE" | grep -oP 'sub-[^/]+(?=/anat/)')
+    ACPC_MASK="${QSIPREP_DIR}/${SUBID}/anat/${SUBID}_space-ACPC_desc-brain_mask.nii.gz"
+
+    if [[ ! -f "$ACPC_MASK" ]]; then
+      echo "  [SKIP] $SUBID: ACPC brain mask not found in QSIPrep anat — skipping"
+      ((MASK_SKIPPED++)) || true
+      continue
+    fi
+
+    MNI_MASK_NAME=$(make_mask_mni_filename "$SUBID")
+    MNI_MASK="${MASK_DIR}/${MNI_MASK_NAME}"
+
+    if [[ -f "$MNI_MASK" && $FORCE -eq 0 ]]; then
+      echo "  [SKIP] $SUBID: mask already exists"
+      ((MASK_SKIPPED++)) || true
+      continue
+    fi
+
+    echo "  [MASK] $SUBID → $MNI_MASK_NAME"
+    if antsApplyTransforms \
+         -i "$ACPC_MASK" \
+         -r "$TEMPLATE" \
+         -t "$XFM_FILE" \
+         -o "$MNI_MASK" \
+         -n NearestNeighbor \
+         -v 0; then
+      echo "  [DONE] → $MNI_MASK_NAME"
+      ((MASK_PROCESSED++)) || true
+    else
+      echo "  [FAIL] $SUBID mask registration failed" >&2
+      ((MASK_FAILED++)) || true
+    fi
+
+  done < <(find "$QSIPREP_DIR" \
+             -name "sub-*_from-ACPC_to-MNI152NLin2009cAsym_mode-image_xfm.h5" \
+           | sort)
+
+  echo "  Masks processed : $MASK_PROCESSED"
+  echo "  Masks skipped   : $MASK_SKIPPED"
+  echo "  Masks failed    : $MASK_FAILED"
+fi
+
+fi  # end of registration-mode (else branch)
+
+# ── Link-only: flatten existing MNI folder into ModelArray tree ──────────────────
+# (-L SOURCE_DIR -m MODELARRAY_DIR)  No ANTs or registration needed.
+if [[ -n "$LINK_SOURCE_DIR" ]]; then
+  echo ""
+  echo "============================================================"
+  echo " Link-only: flattening existing MNI NIfTIs"
+  echo " Source  : $LINK_SOURCE_DIR"
+  echo " ModelArray : $MODELARRAY_DIR"
+  echo "============================================================"
+  echo ""
+
+  # Shared helper (defined here so it works even when INPUT_DIR is empty)
+  extract_scalar_name() {
+    local fname="$1"
+    local name
+    if name=$(echo "$fname" | grep -oP '(?<=param-)\w+' | head -1) && [[ -n "$name" ]]; then
+      echo "$name"; return
+    fi
+    if name=$(echo "$fname" | grep -oP '(?<=model-)\w+' | head -1) && [[ -n "$name" ]]; then
+      echo "$name"; return
+    fi
+    name="${fname%.nii.gz}"
+    name="${name%%_space-*}"
+    name="${name##*_}"
+    echo "$name"
+  }
+
+  LINK_COUNT=0
+  LINK_SKIPPED=0
+
+  # Find all MNI-space NIfTIs recursively (skip ACPC and other spaces)
+  while IFS= read -r nii_file; do
+    bn=$(basename "$nii_file")
+    scalar=$(extract_scalar_name "$bn")
+    scalar_dir="${MODELARRAY_DIR}/${scalar}"
+    mkdir -p "$scalar_dir"
+    link="${scalar_dir}/${bn}"
+    abs_nii=$(realpath -m "$nii_file")
+    if [[ ! -L "$link" || $FORCE -eq 1 ]]; then
+      ln -sf "$abs_nii" "$link"
+      ((LINK_COUNT++)) || true
+    else
+      ((LINK_SKIPPED++)) || true
+    fi
+  done < <(find "$LINK_SOURCE_DIR" -name "*.nii.gz" \
+             \( -name "*space-MNI*" -o -name "*_MNI*" \) \
+           | sort)
+
+  echo "  Symlinks created : $LINK_COUNT"
+  echo "  Symlinks skipped : $LINK_SKIPPED"
+  echo "  Scalars found    : $(ls "$MODELARRAY_DIR" | tr '\n' ' ')"
+fi
+
 # ── Final summary ──────────────────────────────────────────────────────────────
 echo ""
 echo "============================================================"
 echo " Done"
-echo " Processed : $PROCESSED"
-echo " Skipped   : $SKIP_COUNT"
-echo " Failed    : $FAILED"
+[[ -n "$INPUT_DIR" ]] && { echo " Processed : $PROCESSED"; echo " Skipped   : $SKIP_COUNT"; echo " Failed    : $FAILED"; }
 [[ -n "$MODELARRAY_DIR" ]] && echo " ModelArray : $MODELARRAY_DIR"
+[[ -n "$MASK_DIR" ]]       && echo " Masks      : $MASK_DIR"
+[[ -n "$LINK_SOURCE_DIR" ]] && echo " Link-only  : $LINK_COUNT symlinks created in $MODELARRAY_DIR"
 echo "============================================================"
 
-[[ $FAILED -eq 0 ]] || exit 1
+[[ -z "$INPUT_DIR" || $FAILED -eq 0 ]] || exit 1

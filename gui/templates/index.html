@@ -148,8 +148,12 @@
           <i class="bi bi-folder2-open"></i> Load
         </button>
         <button class="btn btn-xs btn-success" onclick="saveProject()"
-                title="Save current settings as a project">
+                title="Save (overwrite current project)">
           <i class="bi bi-floppy"></i> Save
+        </button>
+        <button class="btn btn-xs btn-outline-success" onclick="saveProjectAs()"
+                title="Save as a new project name">
+          <i class="bi bi-floppy2"></i> Save As
         </button>
       </div>
     </div>
@@ -284,6 +288,31 @@
                     <button class="btn btn-outline-secondary btn-browse"
                             title="Browse"
                             onclick="openPicker('s0-modelarray-dir','dir','ModelArray symlink tree')">
+                      <i class="bi bi-folder2"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Link-only source directory
+                    <small class="text-muted">data already in MNI space but nested under sub-/ses-/ — flattens into ModelArray tree with symlinks, no registration needed — leave blank to skip</small></label>
+                  <div class="input-group input-group-sm">
+                    <input id="s0-link-source-dir" type="text" class="form-control"
+                           placeholder="/data/local/.../qsirecon/derivatives/qsirecon-NODDI">
+                    <button class="btn btn-outline-secondary btn-browse"
+                            title="Browse"
+                            onclick="openPicker('s0-link-source-dir','dir','Link-only source directory')">
+                      <i class="bi bi-folder2"></i>
+                    </button>
+                  </div>
+                </div>
+                    <small class="text-muted"><span class="badge bg-info text-dark" style="font-size:.7rem">QSIPrep</span>
+                    registers each subject's ACPC brain mask from QSIPrep's anat folder to MNI space (NearestNeighbor) — leave blank to skip</small></label>
+                  <div class="input-group input-group-sm">
+                    <input id="s0-mask-dir" type="text" class="form-control"
+                           placeholder="/data/local/.../derivatives/modelarray/noddi/masks">
+                    <button class="btn btn-outline-secondary btn-browse"
+                            title="Browse"
+                            onclick="openPicker('s0-mask-dir','dir','Brain mask output directory')">
                       <i class="bi bi-folder2"></i>
                     </button>
                   </div>
@@ -740,7 +769,8 @@ const PROJECT_FIELDS = [
   // Project card
   "proj-name", "proj-desc", "proj-output-dir",
   // Step 0
-  "s0-input-dir", "s0-output-dir", "s0-qsiprep-dir", "s0-modelarray-dir",
+  "s0-input-dir", "s0-output-dir", "s0-qsiprep-dir", "s0-modelarray-dir", "s0-mask-dir",
+  "s0-link-source-dir",
   "s0-resolution", "s0-jobs", "s0-interpolation",
   // Step 1
   "s1-participants", "s1-nii-folder", "s1-mask-folder",
@@ -799,10 +829,7 @@ async function loadProjectList() {
   } catch {}
 }
 
-async function saveProject() {
-  const name = (v("proj-name") || "").trim() ||
-               prompt("Project name (used as filename):", "my_project");
-  if (!name) return;
+async function _doSaveProject(name) {
   const clean = name.replace(/[\s/\\]+/g, "_");
   try {
     const r = await fetch("/save_project", {
@@ -812,10 +839,28 @@ async function saveProject() {
     });
     const d = await r.json();
     if (d.error) { showToast("Error: " + d.error, "danger"); return; }
+    // Keep proj-name in sync
+    document.getElementById("proj-name").value = clean;
     showToast(d.message, "success");
     await loadProjectList();
     document.getElementById("proj-file-select").value = clean;
   } catch(e) { showToast("Save error: " + e, "danger"); }
+}
+
+async function saveProject() {
+  const name = (v("proj-name") || "").trim();
+  if (!name) {
+    showToast("Enter a project name first, or use Save As.", "warning");
+    return;
+  }
+  await _doSaveProject(name);
+}
+
+async function saveProjectAs() {
+  const current = (v("proj-name") || "").trim();
+  const name = prompt("Save as (project name):", current || "my_project");
+  if (!name || !name.trim()) return;
+  await _doSaveProject(name.trim());
 }
 
 async function loadProject() {
@@ -1308,17 +1353,20 @@ async function runStep(step) {
   let args = {};
   if (step === "0") {
     args = {
-      input_dir:      v("s0-input-dir"),
-      output_dir:     v("s0-output-dir"),
-      qsiprep_dir:    v("s0-qsiprep-dir"),
-      modelarray_dir: v("s0-modelarray-dir"),
-      resolution:     v("s0-resolution"),
-      jobs:           v("s0-jobs"),
-      interpolation:  v("s0-interpolation"),
-      force:          document.getElementById("s0-force").checked
+      input_dir:        v("s0-input-dir"),
+      output_dir:       v("s0-output-dir"),
+      qsiprep_dir:      v("s0-qsiprep-dir"),
+      modelarray_dir:   v("s0-modelarray-dir"),
+      mask_dir:         v("s0-mask-dir"),
+      link_source_dir:  v("s0-link-source-dir"),
+      resolution:       v("s0-resolution"),
+      jobs:             v("s0-jobs"),
+      interpolation:    v("s0-interpolation"),
+      force:            document.getElementById("s0-force").checked
     };
-    if (!args.input_dir) { showToast("Input directory is required.", "danger"); return; }
-    if (!args.qsiprep_dir) { showToast("QSIPrep directory is required for Step 0.", "danger"); return; }
+    if (!args.input_dir && !args.link_source_dir) {
+      showToast("Either Input directory (-i) or Link-only source (-L) is required for Step 0.", "danger"); return;
+    }
   } else if (step === "1") {
     args = {
       longitudinal:  document.getElementById("s1-longitudinal").checked,

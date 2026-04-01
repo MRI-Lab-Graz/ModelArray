@@ -102,6 +102,7 @@ MASK_DIR=""
 LINK_SOURCE_DIR=""
 INTERP="Linear"
 RES_TAG="01"
+RES_IS_FLOAT=0
 JOBS=1
 FORCE=0
 
@@ -314,9 +315,10 @@ echo "Files to process        : $FOUND_FILES"
 echo "Files skipped (exist)   : $SKIP_COUNT"
 echo ""
 
+HAVE_REGISTRATION_JOBS=1
 if [[ ${#JOB_LIST[@]} -eq 0 ]]; then
-  echo "Nothing to do. Exiting."
-  exit 0
+  HAVE_REGISTRATION_JOBS=0
+  echo "Nothing new to register. Reusing existing MNI outputs."
 fi
 
 # ── Execute jobs ───────────────────────────────────────────────────────────────
@@ -346,27 +348,45 @@ run_job() {
 }
 export -f run_job make_mni_filename
 
-if [[ $JOBS -gt 1 ]] && command -v parallel >/dev/null 2>&1; then
-  printf '%s\n' "${JOB_LIST[@]}" \
-    | parallel --jobs "$JOBS" --halt soon,fail=1 run_job {}
-  PROCESSED=${#JOB_LIST[@]}
-else
-  if [[ $JOBS -gt 1 ]]; then
-    echo "WARNING: GNU parallel not found, running sequentially."
-  fi
-  for entry in "${JOB_LIST[@]}"; do
-    if run_job "$entry"; then
-      ((PROCESSED++)) || true
-    else
-      ((FAILED++)) || true
+if [[ $HAVE_REGISTRATION_JOBS -eq 1 ]]; then
+  if [[ $JOBS -gt 1 ]] && command -v parallel >/dev/null 2>&1; then
+    printf '%s\n' "${JOB_LIST[@]}" \
+      | parallel --jobs "$JOBS" --halt soon,fail=1 run_job {}
+    PROCESSED=${#JOB_LIST[@]}
+  else
+    if [[ $JOBS -gt 1 ]]; then
+      echo "WARNING: GNU parallel not found, running sequentially."
     fi
-  done
+    for entry in "${JOB_LIST[@]}"; do
+      if run_job "$entry"; then
+        ((PROCESSED++)) || true
+      else
+        ((FAILED++)) || true
+      fi
+    done
+  fi
 fi
 
 # ── ModelArray flat tree (symlinks) ───────────────────────────────────────────
 if [[ -n "$MODELARRAY_DIR" ]]; then
   echo ""
   echo "Building ModelArray directory tree: $MODELARRAY_DIR"
+
+  matches_requested_resolution() {
+    local fname="$1"
+
+    if [[ $RES_IS_FLOAT -eq 1 ]]; then
+      [[ "$fname" == *"_res-${RES_TAG}mm_"* || "$fname" == *"_res-${RES_TAG}mm."* ]]
+      return
+    fi
+
+    if [[ "$RES_TAG" == "01" ]]; then
+      [[ "$fname" != *"_res-"* ]]
+      return
+    fi
+
+    [[ "$fname" == *"_res-${RES_TAG}_"* || "$fname" == *"_res-${RES_TAG}."* ]]
+  }
 
   # Helper: extract scalar/param name from a NIfTI filename.
   # Priority: BIDS param-XXX tag → model-XXX tag → filename stem.
@@ -389,21 +409,54 @@ if [[ -n "$MODELARRAY_DIR" ]]; then
   }
 
   LINK_COUNT=0
-  for entry in "${JOB_LIST[@]}"; do
-    IFS='|' read -r _in mni_file _xfm <<< "$entry"
-    bn=$(basename "$mni_file")
-    scalar=$(extract_scalar_name "$bn")
-    scalar_dir="${MODELARRAY_DIR}/${scalar}"
-    mkdir -p "$scalar_dir"
-    link="${scalar_dir}/${bn}"
-    # Use absolute path for the symlink target
-    abs_mni=$(realpath -m "$mni_file")
-    if [[ ! -L "$link" || $FORCE -eq 1 ]]; then
-      ln -sf "$abs_mni" "$link"
-      ((LINK_COUNT++)) || true
-    fi
-  done
+  STALE_LINKS_REMOVED=0
 
+  while IFS= read -r existing_link; do
+    bn=$(basename "$existing_link")
+    if ! matches_requested_resolution "$bn"; then
+      rm -f "$existing_link"
+      ((STALE_LINKS_REMOVED++)) || true
+    fi
+  done < <(find "$MODELARRAY_DIR" -mindepth 2 -maxdepth 2 -type l -name "*.nii.gz" | sort)
+
+  if [[ ${#JOB_LIST[@]} -gt 0 ]]; then
+    for entry in "${JOB_LIST[@]}"; do
+      IFS='|' read -r _in mni_file _xfm <<< "$entry"
+      bn=$(basename "$mni_file")
+      scalar=$(extract_scalar_name "$bn")
+      scalar_dir="${MODELARRAY_DIR}/${scalar}"
+      mkdir -p "$scalar_dir"
+      link="${scalar_dir}/${bn}"
+      abs_mni=$(realpath -m "$mni_file")
+      if [[ ! -L "$link" || $FORCE -eq 1 ]]; then
+        ln -sf "$abs_mni" "$link"
+        ((LINK_COUNT++)) || true
+      fi
+    done
+  else
+    SEARCH_ROOT="$INPUT_DIR"
+    if [[ -n "$OUTPUT_DIR" ]]; then
+      SEARCH_ROOT="$OUTPUT_DIR"
+    fi
+
+    while IFS= read -r mni_file; do
+      bn=$(basename "$mni_file")
+      matches_requested_resolution "$bn" || continue
+      scalar=$(extract_scalar_name "$bn")
+      scalar_dir="${MODELARRAY_DIR}/${scalar}"
+      mkdir -p "$scalar_dir"
+      link="${scalar_dir}/${bn}"
+      abs_mni=$(realpath -m "$mni_file")
+      if [[ ! -L "$link" || $FORCE -eq 1 ]]; then
+        ln -sf "$abs_mni" "$link"
+        ((LINK_COUNT++)) || true
+      fi
+    done < <(find "$SEARCH_ROOT" -name "*.nii.gz" \
+               \( -name "*space-MNI*" -o -name "*_MNI*" \) \
+             | sort)
+  fi
+
+  echo "  Stale links removed: $STALE_LINKS_REMOVED"
   echo "  Symlinks created: $LINK_COUNT"
   echo "  Scalars found   : $(ls "$MODELARRAY_DIR" | tr '\n' ' ')"
 fi

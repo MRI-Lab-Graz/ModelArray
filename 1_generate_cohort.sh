@@ -5,6 +5,56 @@ usage() {
   exit 1
 }
 
+pick_mask_file() {
+  local subject="$1"
+  local candidate=""
+
+  candidate=$(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}_space-*_desc-brain_mask.nii.gz" | sort | head -n 1)
+  if [[ -n "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+
+  candidate=$(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}*.nii.gz" | sort | head -n 1)
+  if [[ -n "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+
+  if [[ $(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name '*.nii.gz' | wc -l) -eq 1 ]]; then
+    find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name '*.nii.gz' | head -n 1
+    return 0
+  fi
+
+  return 1
+}
+
+extract_res_tag() {
+  local path="$1"
+  basename "$path" | grep -oE 'res-[^_]+' | head -n 1 || true
+}
+
+pick_scalar_file() {
+  local subject="$1"
+  local preferred_res="$2"
+  local candidate=""
+  local -a candidates=()
+
+  mapfile -t candidates < <(find "$NII_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}*.nii.gz" | sort)
+  [[ ${#candidates[@]} -gt 0 ]] || return 1
+
+  if [[ -n "$preferred_res" ]]; then
+    for candidate in "${candidates[@]}"; do
+      if [[ $(basename "$candidate") == *"_${preferred_res}_"* || $(basename "$candidate") == *"_${preferred_res}."* ]]; then
+        printf '%s\n' "$candidate"
+        return 0
+      fi
+    done
+  fi
+
+  printf '%s\n' "${candidates[0]}"
+}
+
 # Default values
 SUBGROUP=""
 COLUMN=""
@@ -83,7 +133,7 @@ IFS=$'\t' read -r -a COLUMNS <<< "$HEADER"
 EXTRA_COLS=$(IFS=','; echo "${COLUMNS[*]:1}")
 
 # Find scalar name
-FIRST_NII_FILE=$(find "$NII_FOLDER" -type f -name "*.nii.gz" | head -n 1)
+FIRST_NII_FILE=$(find "$NII_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "*.nii.gz" | sort | head -n 1)
 if [[ -z "$FIRST_NII_FILE" ]]; then
   echo "No Nifit file found in $NII_FOLDER"
   exit 1
@@ -104,12 +154,16 @@ echo "scalar_name,source_file,source_mask_file,subject_id,$EXTRA_COLS" > "$OUTPU
 REF_DIM=""
 REF_SUBJECT=""
 
-tail -n +2 "$PARTICIPANTS_FILE" | while IFS=$'\t' read -r -a LINE; do
+while IFS=$'\t' read -r -a LINE; do
   SUBJECT_ID="${LINE[0]}"
   SUBJECT_SHORT=$(echo "$SUBJECT_ID" | cut -d'_' -f1)
 
-  NII_FILE=$(find "$NII_FOLDER" -type f -name "${SUBJECT_SHORT}*.nii.gz" | head -n 1)
-  MASK_FILE=$(find "$MASK_FOLDER" -type f -name "${SUBJECT_SHORT}*.nii.gz" | head -n 1)
+  MASK_FILE=$(pick_mask_file "$SUBJECT_SHORT" || true)
+  PREFERRED_RES=""
+  if [[ -n "$MASK_FILE" ]]; then
+    PREFERRED_RES=$(extract_res_tag "$MASK_FILE")
+  fi
+  NII_FILE=$(pick_scalar_file "$SUBJECT_SHORT" "$PREFERRED_RES" || true)
 
   if [[ -f "$NII_FILE" && -f "$MASK_FILE" ]]; then
     NII_DIM=$(mrinfo "$NII_FILE" -quiet -size | tr -d '\n')
@@ -136,7 +190,7 @@ printf "%s,%s,%s,%s,%s\n" "$SCALAR_NAME" "$SHORT_NII" "$SHORT_MASK" "$SUBJECT_SH
   else
     echo "WARNING: Missing Nifit or mask file for $SUBJECT_SHORT"
   fi
-done
+done < <(tail -n +2 "$PARTICIPANTS_FILE")
 
 echo "Cohort file created: $OUTPUT_FILE"
 echo "Showing the head to double-check"

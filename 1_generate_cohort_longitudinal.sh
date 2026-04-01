@@ -104,6 +104,64 @@ OUTPUT_FILE="${OUTPUT_FOLDER}/cohort_${SCALAR_NAME}${SUFFIX}.csv"
 
 echo "scalar_name,source_file,source_mask_file,subject_id,${EXTRA_COLS}" > "$OUTPUT_FILE"
 
+extract_res_tag() {
+  local path="$1"
+  basename "$path" | grep -oE 'res-[^_]+' | head -n 1 || true
+}
+
+pick_mask_file() {
+  local subject="$1"
+  local session="$2"
+  local candidate=""
+
+  candidate=$(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}_${session}*.nii.gz" | sort | head -n 1)
+  if [[ -n "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+
+  candidate=$(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}_space-*_desc-brain_mask.nii.gz" | sort | head -n 1)
+  if [[ -n "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+
+  candidate=$(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}*.nii.gz" | sort | head -n 1)
+  if [[ -n "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+
+  if [[ $(find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name '*.nii.gz' | wc -l) -eq 1 ]]; then
+    find "$MASK_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name '*.nii.gz' | head -n 1
+    return 0
+  fi
+
+  return 1
+}
+
+pick_scalar_file() {
+  local subject="$1"
+  local session="$2"
+  local preferred_res="$3"
+  local candidate=""
+  local -a candidates=()
+
+  mapfile -t candidates < <(find "$NII_FOLDER" -maxdepth 1 \( -type f -o -type l \) -name "${subject}_${session}*.nii.gz" | sort)
+  [[ ${#candidates[@]} -gt 0 ]] || return 1
+
+  if [[ -n "$preferred_res" ]]; then
+    for candidate in "${candidates[@]}"; do
+      if [[ $(basename "$candidate") == *"_${preferred_res}_"* || $(basename "$candidate") == *"_${preferred_res}."* ]]; then
+        printf '%s\n' "$candidate"
+        return 0
+      fi
+    done
+  fi
+
+  printf '%s\n' "${candidates[0]}"
+}
+
 # ── Match rows → NIfTI files ──────────────────────────────────────────────────
 MATCHED=0
 MISSING=0
@@ -115,17 +173,21 @@ while IFS=$'\t' read -r -a LINE; do
   SUB=$(echo "$PARTICIPANT_ID" | grep -oP '^sub-\d+')
   SES=$(echo "$PARTICIPANT_ID" | grep -oP 'ses-\d+$')
 
-  # Find the NIfTI for this exact subject+session
-  NII_FILE=$(find "$NII_FOLDER" -maxdepth 1 -name "${SUB}_${SES}*.nii.gz" | head -n 1)
-  MASK_FILE=$(find "$MASK_FOLDER" -maxdepth 1 -name "${SUB}_${SES}*.nii.gz" | head -n 1)
-
-  # Fallback: if mask folder has only one mask (e.g. group brain mask), use it
-  if [[ -z "$MASK_FILE" ]]; then
-    MASK_FILE=$(find "$MASK_FOLDER" -maxdepth 1 -name "*.nii.gz" | head -n 1)
+  MASK_FILE=$(pick_mask_file "$SUB" "$SES" || true)
+  PREFERRED_RES=""
+  if [[ -n "$MASK_FILE" ]]; then
+    PREFERRED_RES=$(extract_res_tag "$MASK_FILE")
   fi
+  NII_FILE=$(pick_scalar_file "$SUB" "$SES" "$PREFERRED_RES" || true)
 
   if [[ -z "$NII_FILE" ]]; then
     echo "  WARNING: No NIfTI found for ${PARTICIPANT_ID}" >&2
+    ((MISSING++)) || true
+    continue
+  fi
+
+  if [[ -z "$MASK_FILE" ]]; then
+    echo "  WARNING: No mask found for ${PARTICIPANT_ID}" >&2
     ((MISSING++)) || true
     continue
   fi

@@ -337,14 +337,22 @@ singularity run --cleanenv -B "$DATA_DIR:/data" \
       {
         line = $0
         if (line == "") next
-        print line
-
         if (match(line, /Starting [A-Za-z0-9_]+ on .*: ([0-9]+)\/[0-9]+ elements/, m)) {
+          print line
           total_elements = m[1] + 0
+          next
         }
 
         if (match(line, /([0-9]{1,3})%, ETA[[:space:]]*[0-9:]+/, p)) {
           pct = p[1] + 0
+
+          # Suppress repeated 1%, 2%, ... progress-bar redraw lines.
+          if (pct != last_bar_pct) {
+            print line
+            fflush()
+            last_bar_pct = pct
+          }
+
           if (pct > 0 && pct != last_pct) {
             now = systime()
             elapsed = now - start_epoch
@@ -362,7 +370,11 @@ singularity run --cleanenv -B "$DATA_DIR:/data" \
             fflush()
             last_pct = pct
           }
+
+          next
         }
+
+        print line
       }
     ' \
   | tee "$LOG_FILE"

@@ -27,7 +27,8 @@ This toolkit provides a command-line pipeline for:
 2. **Cohort creation**
 3. **HDF5 creation with convoxel**
 4. **ModelArray analysis**
-5. **Flexible execution via JSON config**
+5. **Optional pattern-recognition ML on H5 features**
+6. **Flexible execution via JSON config**
 
 Each step is fully scripted and validated for reproducibility and consistency.
 
@@ -58,6 +59,9 @@ participants.tsv + image/mask data + group mask
          │
          ▼
   CSV summaries + HDF5 results + NIfTI stats
+             │
+             ▼
+   optional 4_run_ml.py (CV metrics + predictions)
 ```
 
 
@@ -132,6 +136,42 @@ explicitly.
 For a full run, add optional `registration`, `cohort`, `convoxel`, and
 `group_mask_source` fields to the same JSON used by `3_run_model.sh`.
 
+### 5. [`4_run_ml.py`](./4_run_ml.py)
+
+Runs an optional pattern-recognition stage directly on the existing ModelArray
+HDF5 matrix (`scalars/<scalar>/values`) plus cohort labels from CSV.
+
+Supported tasks:
+- `classification`
+- `regression`
+
+Supported models:
+- `random_forest`
+- `svm_rbf`
+- `elastic_net`
+- `xgboost` (optional dependency)
+
+This stage is automatically invoked by `run_full_from_json.sh` when
+`ml.enabled` is `true`.
+
+Example scalar-level JSON block:
+
+```json
+"ml": {
+   "enabled": true,
+   "task": "classification",
+   "target_column": "group",
+   "group_column": "participant",
+   "id_columns": ["participant", "session"],
+   "n_splits": 5,
+   "random_seed": 42,
+   "models": ["random_forest", "svm_rbf", "elastic_net"],
+   "output_dir": "results/icvf_gam_2mm/ml"
+}
+```
+
+For family configs, place the same block under `statistics.ml`.
+
 ------
 
 ## ⚙️ Requirements
@@ -141,6 +181,34 @@ For a full run, add optional `registration`, `cohort`, `convoxel`, and
 - [`mrinfo`](https://mrtrix.readthedocs.io/) (from MRtrix3)
 - `singularity`
 - A valid `modelarray_confixel_0.1.5.sif` container file
+
+------
+
+## 📝 Repo Notes
+
+### Execution Strategy (Current)
+
+- Keep core ModelArray steps containerized for reproducibility:
+   - `2_run_convoxel.sh`
+   - `3_run_model.sh`
+   - `volumestats_write` export
+- Keep orchestration and lightweight prep on host:
+   - JSON orchestration wrappers
+   - cohort table generation
+   - registration/linking helpers
+
+### Pattern-Recognition / ML Plan
+
+- Use the existing ModelArray HDF5 (`.h5`) outputs as ML input features.
+- First prototype ML stage locally on host for rapid iteration.
+- If local prototype is stable and useful, build a project-specific container for the ML stage.
+- Goal state: default ML execution in container, with optional local mode for debugging.
+
+### Why This Policy
+
+- Fast iteration during method development.
+- Reproducible production runs once methods are finalized.
+- Clear separation between experimental and production workflows.
 
 ------
 

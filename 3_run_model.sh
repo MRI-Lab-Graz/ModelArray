@@ -70,7 +70,7 @@ if [[ "$ELEMENT_SUBSET_JSON" != "null" && "$ELEMENT_RANGE_JSON" != "null" ]]; th
 fi
 
 if [[ "$ELEMENT_SUBSET_JSON" != "null" ]]; then
-  if ! jq -e '(.element_subset | type) == "array" and (.element_subset | length) > 0 and all(.[]; type == "number" and floor == . and . >= 1)' "$CONFIG_PATH" >/dev/null; then
+  if ! jq -e '(.element_subset | type) == "array" and (.element_subset | length) > 0 and (.element_subset | all(.[]; type == "number" and floor == . and . >= 1))' "$CONFIG_PATH" >/dev/null; then
     echo "🛑 element_subset must be a non-empty array of 1-based integers."
     exit 1
   fi
@@ -78,7 +78,7 @@ if [[ "$ELEMENT_SUBSET_JSON" != "null" ]]; then
 fi
 
 if [[ "$ELEMENT_RANGE_JSON" != "null" ]]; then
-  if ! jq -e '(.element_range | type) == "array" and (.element_range | length) == 2 and all(.[]; type == "number" and floor == . and . >= 1) and .[0] <= .[1]' "$CONFIG_PATH" >/dev/null; then
+  if ! jq -e '(.element_range | type) == "array" and (.element_range | length) == 2 and (.element_range | all(.[]; type == "number" and floor == . and . >= 1)) and (.element_range[0] <= .element_range[1])' "$CONFIG_PATH" >/dev/null; then
     echo "🛑 element_range must be [start, end] with 1-based integers and start <= end."
     exit 1
   fi
@@ -182,7 +182,7 @@ EOF
 
 if [ -n "$ELEMENT_SUBSET_R" ]; then
 cat >> "$R_SCRIPT_PATH" <<EOF
-element_subset <- c($ELEMENT_SUBSET_R)
+element_subset <- as.integer(c($ELEMENT_SUBSET_R))
 
 EOF
 fi
@@ -247,9 +247,6 @@ heartbeat_enabled <- TRUE
 if ($N_CORES > 1) {
   if (!"ignore.interactive" %in% names(model_options)) {
     model_options\$ignore.interactive <- TRUE
-  }
-  if (!"mc.style" %in% names(model_options)) {
-    model_options\$mc.style <- "ETA"
   }
   ts("Parallel progress bar enabled (percentage + ETA).")
 }

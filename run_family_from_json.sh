@@ -95,6 +95,55 @@ render_template() {
   printf '%s\n' "$rendered"
 }
 
+render_ml_for_scalar() {
+  local scalar="$1"
+  local ml_json="$ML_JSON"
+
+  if [[ "$ml_json" == "{}" ]]; then
+    printf '{}\n'
+    return
+  fi
+
+  local output_dir=""
+  local metrics_file=""
+  local predictions_file=""
+  local summary_file=""
+  local template=""
+
+  template="$(jq -r '.output_dir_template // empty' <<<"$ml_json")"
+  if [[ -n "$template" ]]; then
+    output_dir="$(render_template "$template" "$scalar")"
+  fi
+
+  template="$(jq -r '.metrics_file_template // empty' <<<"$ml_json")"
+  if [[ -n "$template" ]]; then
+    metrics_file="$(render_template "$template" "$scalar")"
+  fi
+
+  template="$(jq -r '.predictions_file_template // empty' <<<"$ml_json")"
+  if [[ -n "$template" ]]; then
+    predictions_file="$(render_template "$template" "$scalar")"
+  fi
+
+  template="$(jq -r '.summary_file_template // empty' <<<"$ml_json")"
+  if [[ -n "$template" ]]; then
+    summary_file="$(render_template "$template" "$scalar")"
+  fi
+
+  jq -c \
+    --arg output_dir "$output_dir" \
+    --arg metrics_file "$metrics_file" \
+    --arg predictions_file "$predictions_file" \
+    --arg summary_file "$summary_file" \
+    '
+      del(.output_dir_template, .metrics_file_template, .predictions_file_template, .summary_file_template)
+      | (if ($output_dir | length) > 0 then .output_dir = $output_dir else . end)
+      | (if ($metrics_file | length) > 0 then .metrics_file = $metrics_file else . end)
+      | (if ($predictions_file | length) > 0 then .predictions_file = $predictions_file else . end)
+      | (if ($summary_file | length) > 0 then .summary_file = $summary_file else . end)
+    ' <<<"$ml_json"
+}
+
 default_qsiprep_dir() {
   local from_config
   from_config="$(json_string '.dataset.qsiprep_dir')"
@@ -290,6 +339,7 @@ CONTINUOUS_COVARIATES_JSON="$(jq -c '.statistics.continuous_covariates // []' "$
 ELEMENT_SUBSET_JSON="$(jq -c '.statistics.element_subset // null' "$CONFIG_PATH")"
 ELEMENT_RANGE_JSON="$(jq -c '.statistics.element_range // null' "$CONFIG_PATH")"
 MODEL_OPTIONS_JSON="$(jq -c '.statistics.model_options // {}' "$CONFIG_PATH")"
+ML_JSON="$(jq -c '.statistics.ml // {}' "$CONFIG_PATH")"
 
 if [[ "$REG_ENABLED" == "true" ]]; then
   [[ -n "$QSIPREP_DIR" ]] || { echo "ERROR: Could not infer qsiprep directory. Set dataset.qsiprep_dir explicitly." >&2; exit 1; }
@@ -339,6 +389,7 @@ for scalar in "${SCALARS[@]}"; do
   analysis_name="$(render_template "$ANALYSIS_NAME_TEMPLATE" "$scalar")"
   csv_summary_path="$(render_template "$CSV_SUMMARY_TEMPLATE" "$scalar")"
   result_dir="$(render_template "$RESULT_DIR_TEMPLATE" "$scalar")"
+  ml_scalar_json="$(render_ml_for_scalar "$scalar")"
   derived_config="$OUTPUT_DIR/configs/generated/${scalar}.json"
 
   jq -n \
@@ -362,6 +413,7 @@ for scalar in "${SCALARS[@]}"; do
     --argjson element_subset "$ELEMENT_SUBSET_JSON" \
     --argjson full_outputs "$FULL_OUTPUTS" \
     --argjson model_options "$MODEL_OPTIONS_JSON" \
+    --argjson ml "$ml_scalar_json" \
     --argjson n_cores "$N_CORES" \
     --argjson num_subj_lthr_abs "$NUM_ABS" \
     --argjson num_subj_lthr_rel "$NUM_REL" \
@@ -407,6 +459,7 @@ for scalar in "${SCALARS[@]}"; do
       + (if $element_subset != null then {element_subset: $element_subset} else {} end)
       + (if $element_range != null then {element_range: $element_range} else {} end)
       + (if $model_options != {} then {model_options: $model_options} else {} end)
+      + (if $ml != {} then {ml: $ml} else {} end)
     ' > "$derived_config"
 
   ts "Generated config: $derived_config"

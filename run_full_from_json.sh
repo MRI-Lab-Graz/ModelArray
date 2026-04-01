@@ -12,6 +12,7 @@ Runs an end-to-end ModelArray workflow from a single JSON config:
   3. Cohort CSV generation
   4. convoxel HDF5 generation
   5. Model fitting + volumetric export
+  6. Optional pattern-recognition ML stage
 
 The script reuses the existing stage scripts in this repository. Existing
 model-stage keys from 3_run_model.sh are still required. The following optional
@@ -128,6 +129,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -f "$CONFIG_PATH" ]] || { echo "ERROR: Config not found: $CONFIG_PATH" >&2; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required." >&2; exit 1; }
 
+# Delegate modality-level (family) configs to the dedicated runner.
+if jq -e 'has("dataset") and has("modality") and has("statistics")' "$CONFIG_PATH" >/dev/null 2>&1; then
+  if [[ "$DRY_RUN" == "true" ]]; then
+    exec bash "$SCRIPT_DIR/run_family_from_json.sh" --dry-run "$CONFIG_PATH"
+  fi
+  exec bash "$SCRIPT_DIR/run_family_from_json.sh" "$CONFIG_PATH"
+fi
+
 RAW_DATA_DIR="$(json_string '.data_dir')"
 CSV_FILE="$(json_string '.csv_file')"
 H5_FILE="$(json_string '.h5_file')"
@@ -174,6 +183,7 @@ COHORT_SUBGROUP="$(json_string '.cohort.subgroup')"
 COHORT_REGENERATE="$(json_bool '.cohort.regenerate')"
 
 CONVOXEL_REGENERATE="$(json_bool '.convoxel.regenerate')"
+ML_ENABLED="$(json_bool '.ml.enabled')"
 
 mkdir -p "$DATA_DIR"
 
@@ -329,5 +339,10 @@ fi
 
 ts "Step E: model fitting"
 run_step bash "$SCRIPT_DIR/3_run_model.sh" "$CONFIG_PATH"
+
+if [[ "$ML_ENABLED" == "true" ]]; then
+  ts "Step F: pattern-recognition ML"
+  run_step python3 "$SCRIPT_DIR/4_run_ml.py" "$CONFIG_PATH"
+fi
 
 ts "All requested steps completed."

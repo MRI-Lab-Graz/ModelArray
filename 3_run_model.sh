@@ -251,7 +251,6 @@ if ($N_CORES > 1) {
   if (!"mc.style" %in% names(model_options)) {
     model_options\$mc.style <- "ETA"
   }
-  heartbeat_enabled <- FALSE
   ts("Parallel progress bar enabled (percentage + ETA).")
 }
 
@@ -263,8 +262,6 @@ if (heartbeat_enabled) {
   heartbeat <- parallel::mcparallel({
     repeat { Sys.sleep(30); cat(sprintf("[%s] Still fitting...\n", format(Sys.time(), "%H:%M:%S"))); flush.console() }
   })
-} else {
-  ts("Heartbeat disabled while percentage progress is active.")
 }
 
 model_args <- c(
@@ -325,10 +322,11 @@ echo "📊 Live fit stats: progress % + throughput + ETA + finish time"
 # Run the model analysis with inline progress summaries parsed from the
 # percentage progress stream.
 MODEL_START_EPOCH=$(date +%s)
+AWK_BIN=$(command -v gawk || command -v awk)
 set +e
 singularity run --cleanenv -B "$DATA_DIR:/data" \
   "$CONTAINER" Rscript /data/$(basename "$R_SCRIPT_PATH") 2>&1 \
-  | awk -v start_epoch="$MODEL_START_EPOCH" '
+  | "$AWK_BIN" -v RS='[\r\n]+' -v ORS='\n' -v start_epoch="$MODEL_START_EPOCH" '
       function fmt_hms(sec, h, m, s) {
         if (sec < 0) sec = 0
         h = int(sec / 3600)
@@ -338,7 +336,7 @@ singularity run --cleanenv -B "$DATA_DIR:/data" \
       }
       {
         line = $0
-        gsub(/\r/, "", line)
+        if (line == "") next
         print line
 
         if (match(line, /Starting [A-Za-z0-9_]+ on .*: ([0-9]+)\/[0-9]+ elements/, m)) {

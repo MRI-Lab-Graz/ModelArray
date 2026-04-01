@@ -66,44 +66,6 @@ run_step() {
   "$@"
 }
 
-find_group_mask_reference() {
-  local mask_dir="$1"
-  local scalar_dir="$2"
-  local reference=""
-
-  if [[ -d "$mask_dir" ]]; then
-    reference=$(find "$mask_dir" -maxdepth 1 \( -type f -o -type l \) -name 'sub-*.nii.gz' ! -name 'group_mask.nii.gz' | sort | head -n 1)
-  fi
-
-  if [[ -z "$reference" && -d "$scalar_dir" ]]; then
-    reference=$(find "$scalar_dir" -maxdepth 1 \( -type f -o -type l \) -name '*.nii.gz' | sort | head -n 1)
-  fi
-
-  printf '%s\n' "$reference"
-}
-
-ensure_group_mask_grid() {
-  local group_mask="$1"
-  local reference="$2"
-  local group_dim=""
-  local reference_dim=""
-  local tmp_mask=""
-
-  [[ "$DRY_RUN" == "true" ]] && return 0
-  [[ -f "$group_mask" && -n "$reference" && -f "$reference" ]] || return 0
-
-  group_dim=$(mrinfo "$group_mask" -quiet -size | tr -d '\n')
-  reference_dim=$(mrinfo "$reference" -quiet -size | tr -d '\n')
-  [[ "$group_dim" != "$reference_dim" ]] || return 0
-
-  command -v mrtransform >/dev/null 2>&1 || { echo "ERROR: mrtransform is required to resample the group mask." >&2; exit 1; }
-
-  ts "  resampling group mask to match $(basename "$reference") (${group_dim} -> ${reference_dim})"
-  tmp_mask="$(mktemp -u "$(dirname "$group_mask")/.group_mask_resampled_XXXXXX.nii.gz")"
-  mrtransform "$group_mask" -template "$reference" -interp nearest "$tmp_mask"
-  mv -f "$tmp_mask" "$group_mask"
-}
-
 resolve_config_path() {
   local path="$1"
   if [[ -z "$path" ]]; then
@@ -165,13 +127,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 [[ -f "$CONFIG_PATH" ]] || { echo "ERROR: Config not found: $CONFIG_PATH" >&2; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required." >&2; exit 1; }
-
-if jq -e 'has("dataset") and has("modality") and has("statistics")' "$CONFIG_PATH" >/dev/null 2>&1; then
-  if [[ "$DRY_RUN" == "true" ]]; then
-    exec bash "$SCRIPT_DIR/run_family_from_json.sh" --dry-run "$CONFIG_PATH"
-  fi
-  exec bash "$SCRIPT_DIR/run_family_from_json.sh" "$CONFIG_PATH"
-fi
 
 RAW_DATA_DIR="$(json_string '.data_dir')"
 CSV_FILE="$(json_string '.csv_file')"
@@ -320,13 +275,10 @@ if [[ ! -f "$GROUP_MASK_PATH" ]]; then
   run_step cp "$(resolve_config_path "$GROUP_MASK_SOURCE")" "$GROUP_MASK_PATH"
 fi
 
-GROUP_MASK_REFERENCE="$(find_group_mask_reference "$COHORT_MASK_DIR_PATH" "$SCALAR_DIR_PATH")"
-ensure_group_mask_grid "$GROUP_MASK_PATH" "$GROUP_MASK_REFERENCE"
-
 mkdir -p "$COHORT_MASK_DIR_PATH"
 MASK_DIR_GROUP_MASK="$COHORT_MASK_DIR_PATH/$(basename "$GROUP_MASK_PATH")"
-if [[ "$MASK_DIR_GROUP_MASK" != "$GROUP_MASK_PATH" ]]; then
-  run_step cp -f "$GROUP_MASK_PATH" "$MASK_DIR_GROUP_MASK"
+if [[ "$MASK_DIR_GROUP_MASK" != "$GROUP_MASK_PATH" && ! -f "$MASK_DIR_GROUP_MASK" ]]; then
+  run_step cp "$GROUP_MASK_PATH" "$MASK_DIR_GROUP_MASK"
 fi
 
 if [[ ! -d "$SCALAR_DIR_PATH" ]]; then

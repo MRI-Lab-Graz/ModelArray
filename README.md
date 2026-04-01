@@ -109,10 +109,7 @@ Takes a single JSON config file and performs the model stage, including volumetr
 The config maps directly to the underlying ModelArray call. `num_subj_lthr_abs`
 and `num_subj_lthr_rel` correspond to the voxelwise subject-threshold behavior
 documented in the ModelArray reference. An optional `element_subset` JSON array
-is also supported for smoke tests or chunked runs. For contiguous test or split
-runs, `element_range: [start, end]` is also supported. Additional ModelArray
-arguments such as GAM `method = "REML"` or p-value correction settings can be
-passed through via `model_options`.
+is also supported for smoke tests or chunked runs.
 
 ### 4. [`run_full_from_json.sh`](./run_full_from_json.sh)
 
@@ -134,53 +131,6 @@ explicitly.
 
 For a full run, add optional `registration`, `cohort`, `convoxel`, and
 `group_mask_source` fields to the same JSON used by `3_run_model.sh`.
-
-### 5. [`run_family_from_json.sh`](./run_family_from_json.sh)
-
-Runs a higher-level, modality-oriented pipeline config. This is the cleaner
-entrypoint when the user wants to define the dataset root, qsirecon modality
-folder, output folder, and one shared statistics template instead of hand-writing
-one scalar config per parameter.
-
-For longitudinal workflows, the runner can derive a session-level
-`participants_longitudinal.tsv` automatically from a subject-level
-`participants.tsv` plus the subject/session folders found in the qsirecon
-derivatives tree.
-
-**Usage:**
-
-```
-./run_family_from_json.sh path/to/pipeline_config.json
-./run_family_from_json.sh --dry-run path/to/pipeline_config.json
-```
-
-`run_full_from_json.sh` detects this config shape and delegates automatically,
-so either entrypoint can be used.
-
-### 6. [`inspect_modelarray_h5.sh`](./inspect_modelarray_h5.sh)
-
-Quickly inspect a ModelArray HDF5 using the convenience functions from the
-official `exploring-h5` vignette: `h5summary()`, `show()`, `sources()`,
-`scalarNames()`, `analysisNames()`, and optionally `exampleElementData()`.
-
-**Usage:**
-
-```
-./inspect_modelarray_h5.sh /path/to/cohort_icvf_dwimap.h5 icvf_dwimap
-./inspect_modelarray_h5.sh /path/to/cohort_icvf_dwimap.h5 icvf_dwimap analysis_name /path/to/cohort_icvf_dwimap.csv
-```
-
-### 7. [`render_nifti_preview.sh`](./render_nifti_preview.sh)
-
-Render a quick PNG slice mosaic from any exported NIfTI result map using FSL
-`slicer`. This is useful for fast QA once `volumestats_write` has produced the
-statistical images.
-
-**Usage:**
-
-```
-./render_nifti_preview.sh /path/to/result_map.nii.gz /path/to/result_map.png
-```
 
 ------
 

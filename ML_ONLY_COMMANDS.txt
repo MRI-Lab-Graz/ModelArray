@@ -1,0 +1,52 @@
+ML-only commands for ModelArray Stage F
+Date: 2026-04-01
+
+Environment setup with UV (run once per machine):
+cd /data/local/software/ModelArray
+python3 -m pip install --user uv
+uv venv .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+
+Activate environment (run in each new shell):
+cd /data/local/software/ModelArray
+source .venv/bin/activate
+
+1) Run ML only for one scalar config (example: icvf)
+cd /data/local/software/ModelArray
+jq '.ml.enabled=true' configs/config_noddi_icvf_gam_2mm.json > /tmp/icvf_ml_only.json
+python3 4_run_ml.py /tmp/icvf_ml_only.json
+
+2) Generate per-scalar configs from family config without running full pipeline
+cd /data/local/software/ModelArray
+bash run_family_from_json.sh --dry-run configs/pipeline_noddi_basal_ganglia_gam_2mm.json
+
+3) Run ML only for all basal-ganglia scalars using generated configs
+cd /data/local/software/ModelArray
+for s in icvf_dwimap od_dwimap isovf_dwimap; do
+  jq '.ml.enabled=true' \
+    /data/local/134_AF19/derivatives/modelarray/noddi_basal_ganglia_2mm/configs/generated/${s}.json \
+    > /tmp/${s}_ml_only.json
+  python3 4_run_ml.py /tmp/${s}_ml_only.json
+done
+
+4) Optional: force a single quick smoke run (2 folds, random forest only)
+cd /data/local/software/ModelArray
+jq '.ml.enabled=true
+    | .ml.models=["random_forest"]
+    | .ml.n_splits=2
+    | .ml.model_params={"random_forest":{"n_estimators":30}}' \
+    configs/config_noddi_icvf_gam_2mm.json > /tmp/icvf_ml_smoke.json
+python3 4_run_ml.py /tmp/icvf_ml_smoke.json
+
+5) Optional: quieter run (suppress sklearn Future/Convergence warnings)
+cd /data/local/software/ModelArray
+for s in icvf_dwimap od_dwimap isovf_dwimap; do
+  jq '.ml.enabled=true
+      | .ml.suppress_future_warnings=true
+      | .ml.suppress_convergence_warnings=true
+      | .ml.model_params.elastic_net.max_iter=20000' \
+    /data/local/134_AF19/derivatives/modelarray/noddi_basal_ganglia_2mm/configs/generated/${s}.json \
+    > /tmp/${s}_ml_quiet.json
+  python3 4_run_ml.py /tmp/${s}_ml_quiet.json
+done

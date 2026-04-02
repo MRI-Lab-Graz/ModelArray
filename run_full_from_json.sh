@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: run_full_from_json.sh [--dry-run] /path/to/config.json
+Usage: run_full_from_json.sh [--dry-run] [--nohup] /path/to/config.json
 
 Runs an end-to-end ModelArray workflow from a single JSON config:
   1. Optional ACPC->MNI registration/linking
@@ -47,6 +47,10 @@ config fields enable a full run:
   convoxel: {
     "regenerate": false
   }
+
+Options:
+  --dry-run   Print the commands that would run without executing them.
+  --nohup     Launch the run in background via nohup and return immediately.
 EOF
   exit 1
 }
@@ -100,12 +104,17 @@ json_bool() {
 }
 
 DRY_RUN=false
+NOHUP_MODE=false
 CONFIG_PATH=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run)
       DRY_RUN=true
+      shift
+      ;;
+    --nohup)
+      NOHUP_MODE=true
       shift
       ;;
     -h|--help)
@@ -128,6 +137,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 [[ -f "$CONFIG_PATH" ]] || { echo "ERROR: Config not found: $CONFIG_PATH" >&2; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required." >&2; exit 1; }
+
+if [[ "$NOHUP_MODE" == "true" ]]; then
+  ts_stamp="$(date +%Y%m%d_%H%M%S)"
+  cfg_base="$(basename "$CONFIG_PATH" .json)"
+  log_file="/tmp/modelarray_full_${cfg_base}_${ts_stamp}.log"
+
+  cmd=(bash "$SCRIPT_DIR/run_full_from_json.sh")
+  if [[ "$DRY_RUN" == "true" ]]; then
+    cmd+=(--dry-run)
+  fi
+  cmd+=("$CONFIG_PATH")
+
+  ts "Launching detached run with nohup"
+  ts "Log file: $log_file"
+  nohup "${cmd[@]}" >"$log_file" 2>&1 &
+  pid=$!
+  ts "Started PID: $pid"
+  exit 0
+fi
 
 # Delegate modality-level (family) configs to the dedicated runner.
 if jq -e 'has("dataset") and has("modality") and has("statistics")' "$CONFIG_PATH" >/dev/null 2>&1; then

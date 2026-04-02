@@ -4,12 +4,16 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: run_family_from_json.sh [--dry-run] /path/to/config.json
+Usage: run_family_from_json.sh [--dry-run] [--nohup] /path/to/config.json
 
 Runs a modality-level ModelArray workflow from a higher-level JSON config.
 The config describes the dataset, qsirecon source, output folder, modality,
 and shared statistics template once; the script derives per-scalar configs and
 then runs the existing scalar-level pipeline for each selected scalar.
+
+Options:
+  --dry-run   Print the commands that would run without executing them.
+  --nohup     Launch the run in background via nohup and return immediately.
 EOF
   exit 1
 }
@@ -202,12 +206,17 @@ default_participants_source() {
 }
 
 DRY_RUN=false
+NOHUP_MODE=false
 CONFIG_PATH=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run)
       DRY_RUN=true
+      shift
+      ;;
+    --nohup)
+      NOHUP_MODE=true
       shift
       ;;
     -h|--help)
@@ -228,6 +237,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 [[ -f "$CONFIG_PATH" ]] || { echo "ERROR: Config not found: $CONFIG_PATH" >&2; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required." >&2; exit 1; }
+
+if [[ "$NOHUP_MODE" == "true" ]]; then
+  ts_stamp="$(date +%Y%m%d_%H%M%S)"
+  cfg_base="$(basename "$CONFIG_PATH" .json)"
+  log_file="/tmp/modelarray_family_${cfg_base}_${ts_stamp}.log"
+
+  cmd=(bash "$SCRIPT_DIR/run_family_from_json.sh")
+  if [[ "$DRY_RUN" == "true" ]]; then
+    cmd+=(--dry-run)
+  fi
+  cmd+=("$CONFIG_PATH")
+
+  ts "Launching detached run with nohup"
+  ts "Log file: $log_file"
+  nohup "${cmd[@]}" >"$log_file" 2>&1 &
+  pid=$!
+  ts "Started PID: $pid"
+  exit 0
+fi
 
 jq -e 'has("dataset") and has("modality") and has("statistics")' "$CONFIG_PATH" >/dev/null \
   || { echo "ERROR: This runner expects a high-level config with dataset, modality, and statistics sections." >&2; exit 1; }
@@ -283,7 +311,15 @@ mkdir -p "$OUTPUT_DIR/results"
 
 PARTICIPANTS_FOR_COHORT="$PARTICIPANTS_SOURCE"
 if [[ "$COHORT_LONGITUDINAL" == "true" ]]; then
-  if head -n1 "$PARTICIPANTS_SOURCE" | grep -q $'\tparticipant\t' && head -n1 "$PARTICIPANTS_SOURCE" | grep -q $'\tsession\b'; then
+  if awk -F'\t' '
+    NR == 1 {
+      for (i = 1; i <= NF; i++) {
+        if ($i == "participant") has_participant = 1
+        if ($i == "session") has_session = 1
+      }
+      exit !(has_participant && has_session)
+    }
+  ' "$PARTICIPANTS_SOURCE"; then
     PARTICIPANTS_FOR_COHORT="$PARTICIPANTS_SOURCE"
   else
     PARTICIPANTS_FOR_COHORT="$OUTPUT_DIR/participants_longitudinal.tsv"

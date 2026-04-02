@@ -1,0 +1,14 @@
+# ModelArray repo Python dependencies
+# Includes GUI and Stage 4 ML runner requirements.
+
+# GUI
+flask>=2.3,<3.2
+jinja2>=3.1,<4
+waitress>=3.0
+
+# ML stage (4_run_ml.py)
+numpy>=1.26
+pandas>=2.1
+h5py>=3.10
+scikit-learn>=1.4
+xgboost>=2.0

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import inspect
 import json
 import sys
+import warnings
 from datetime import datetime
 from pathlib import Path
 
@@ -67,8 +69,10 @@ def load_dependencies():
         r2_score,
         roc_auc_score,
     )
+    from sklearn.exceptions import ConvergenceWarning
     from sklearn.model_selection import GroupKFold, KFold, StratifiedKFold
     from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
     from sklearn.preprocessing import LabelEncoder, StandardScaler
     from sklearn.svm import SVC, SVR
 
@@ -87,10 +91,12 @@ def load_dependencies():
         "mean_squared_error": mean_squared_error,
         "r2_score": r2_score,
         "roc_auc_score": roc_auc_score,
+        "ConvergenceWarning": ConvergenceWarning,
         "GroupKFold": GroupKFold,
         "KFold": KFold,
         "StratifiedKFold": StratifiedKFold,
         "Pipeline": Pipeline,
+        "SimpleImputer": SimpleImputer,
         "LabelEncoder": LabelEncoder,
         "StandardScaler": StandardScaler,
         "SVC": SVC,
@@ -179,7 +185,6 @@ def build_estimator(model_name, task, model_params, seed, n_jobs, deps, n_classe
     if model_name == "elastic_net":
         if task == "classification":
             defaults = {
-                "penalty": "elasticnet",
                 "solver": "saga",
                 "l1_ratios": [0.1, 0.5, 0.9],
                 "Cs": 10,
@@ -187,9 +192,13 @@ def build_estimator(model_name, task, model_params, seed, n_jobs, deps, n_classe
                 "class_weight": "balanced",
                 "max_iter": 5000,
                 "n_jobs": n_jobs,
-                "multi_class": "auto",
                 "random_state": seed,
             }
+            if (
+                "use_legacy_attributes" in inspect.signature(LogisticRegressionCV).parameters
+                and "use_legacy_attributes" not in params
+            ):
+                defaults["use_legacy_attributes"] = False
             if n_classes <= 2:
                 defaults["scoring"] = "roc_auc"
             else:
@@ -342,6 +351,8 @@ def main() -> None:
     models = normalize_models(ml.get("models", []))
     model_params = ml.get("model_params", {})
     primary_metric = ml.get("primary_metric")
+    suppress_future_warnings = bool(ml.get("suppress_future_warnings", False))
+    suppress_convergence_warnings = bool(ml.get("suppress_convergence_warnings", False))
 
     output_root_default = Path(config.get("output_dir", "results")) / "ml"
     output_root = resolve_data_path(data_dir, ml.get("output_dir", str(output_root_default)))
@@ -356,8 +367,23 @@ def main() -> None:
     np = deps["np"]
     pd = deps["pd"]
     Pipeline = deps["Pipeline"]
+    SimpleImputer = deps["SimpleImputer"]
     StandardScaler = deps["StandardScaler"]
     LabelEncoder = deps["LabelEncoder"]
+    ConvergenceWarning = deps["ConvergenceWarning"]
+
+    if suppress_future_warnings:
+        warnings.filterwarnings(
+            "ignore",
+            category=FutureWarning,
+            module=r"sklearn\.linear_model\._logistic",
+        )
+    if suppress_convergence_warnings:
+        warnings.filterwarnings(
+            "ignore",
+            category=ConvergenceWarning,
+            module=r"sklearn\.linear_model\._sag",
+        )
 
     h5_path = resolve_data_path(data_dir, h5_file)
     cohort_path = resolve_data_path(data_dir, csv_file)
@@ -469,11 +495,15 @@ def main() -> None:
         )
 
         use_scaler = scale_features and model_name in {"svm_rbf", "elastic_net"}
-        if use_scaler:
-            model = Pipeline([
-                ("scale", StandardScaler()),
-                ("model", estimator),
-            ])
+        needs_imputer = model_name in {"svm_rbf", "elastic_net"}
+        if use_scaler or needs_imputer:
+            steps = []
+            if needs_imputer:
+                steps.append(("impute", SimpleImputer(strategy="mean")))
+            if use_scaler:
+                steps.append(("scale", StandardScaler()))
+            steps.append(("model", estimator))
+            model = Pipeline(steps)
         else:
             model = estimator
 
@@ -620,6 +650,8 @@ def main() -> None:
             "n_splits": n_splits,
             "random_seed": seed,
             "scale_features": scale_features,
+            "suppress_future_warnings": suppress_future_warnings,
+            "suppress_convergence_warnings": suppress_convergence_warnings,
             "primary_metric": primary_metric,
         },
         "data": {

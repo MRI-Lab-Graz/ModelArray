@@ -320,8 +320,17 @@ echo "📊 Live fit stats: progress % + throughput + ETA + finish time"
 # percentage progress stream.
 MODEL_START_EPOCH=$(date +%s)
 AWK_BIN=$(command -v gawk || command -v awk)
+THREAD_ENV_ARGS=(
+  --env OMP_NUM_THREADS=1
+  --env OPENBLAS_NUM_THREADS=1
+  --env MKL_NUM_THREADS=1
+  --env BLIS_NUM_THREADS=1
+  --env VECLIB_MAXIMUM_THREADS=1
+  --env NUMEXPR_NUM_THREADS=1
+)
 set +e
 singularity run --cleanenv -B "$DATA_DIR:/data" \
+  "${THREAD_ENV_ARGS[@]}" \
   "$CONTAINER" Rscript /data/$(basename "$R_SCRIPT_PATH") 2>&1 \
   | "$AWK_BIN" -v RS='[\r\n]+' -v ORS='\n' -v start_epoch="$MODEL_START_EPOCH" '
       function fmt_hms(sec, h, m, s) {
@@ -386,6 +395,7 @@ fi
 # Write results to NIfTI
 echo "📦 Writing output NIfTI files..."
 singularity run --cleanenv -B "$DATA_DIR:/data" \
+  "${THREAD_ENV_ARGS[@]}" \
   "$CONTAINER" volumestats_write \
   --group-mask-file "/data/$GROUP_MASK" \
   --cohort-file "/data/$CSV_FILE" \

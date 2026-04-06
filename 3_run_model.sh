@@ -238,6 +238,59 @@ ts <- function(msg) {
 }
 
 n_elements_total <- numElementsTotal(modelarray, "$SCALER_TYPE")
+
+# For by-group smooths, remove elements that only have finite values in a subset
+# of groups. A single such element can make mgcv::gam fail and abort the run.
+formula_text <- paste(deparse(formula), collapse = " ")
+if (grepl("by\\\\s*=\\\\s*group_F", formula_text)) {
+  if (!("group_F" %in% names(phenotypes))) {
+    stop("Pre-filter requested by formula, but group_F was not found in phenotypes.")
+  }
+
+  group_levels <- levels(droplevels(phenotypes\$group_F))
+  if (length(group_levels) >= 2) {
+    scalar_matrix <- scalars(modelarray)[["$SCALER_TYPE"]]
+    scalar_matrix <- as.matrix(scalar_matrix)
+
+    # ModelArray stores [elements x subjects]. If transposed, fix it.
+    if (ncol(scalar_matrix) != nrow(phenotypes) && nrow(scalar_matrix) == nrow(phenotypes)) {
+      scalar_matrix <- t(scalar_matrix)
+    }
+    if (ncol(scalar_matrix) != nrow(phenotypes)) {
+      stop("Could not align scalar matrix columns with phenotype rows for pre-filtering.")
+    }
+
+    candidate_ids <- if (is.null(element_subset)) seq_len(nrow(scalar_matrix)) else as.integer(element_subset)
+    finite_mask <- is.finite(scalar_matrix[candidate_ids, , drop = FALSE])
+    keep_mask <- rep(TRUE, length(candidate_ids))
+
+    for (lev in group_levels) {
+      level_idx <- which(phenotypes\$group_F == lev)
+      keep_mask <- keep_mask & (rowSums(finite_mask[, level_idx, drop = FALSE]) > 0)
+    }
+
+    dropped_ids <- candidate_ids[!keep_mask]
+
+    if (length(dropped_ids) > 0) {
+      # Keep output shape stable: mark problematic elements as NaN so ModelArray
+      # skips them via subject-threshold checks instead of crashing mgcv.
+      modelarray@scalars[["$SCALER_TYPE"]][dropped_ids, ] <- NaN
+      ts(sprintf("Pre-filter masked %d/%d elements for by=group_F (missing finite values in >=1 group).", length(dropped_ids), length(candidate_ids)))
+      dropped_path <- file.path("/data", "$OUTPUT_DIR", sprintf("prefilter_dropped_%s.txt", "$SCALER_TYPE"))
+      writeLines(as.character(dropped_ids), dropped_path)
+      ts(sprintf("Saved masked 1-based element IDs to %s", dropped_path))
+    } else {
+      ts("Pre-filter check for by=group_F found no invalid elements.")
+    }
+
+    if (length(dropped_ids) == length(candidate_ids)) {
+      stop("Pre-filter marked all candidate elements invalid; no elements remain for model fitting.")
+    }
+  } else {
+    ts("Pre-filter skipped: group_F has fewer than 2 levels.")
+  }
+}
+
 n_elements <- if (is.null(element_subset)) n_elements_total else length(element_subset)
 ts(sprintf("Starting ${MODEL_TYPE} on %s: %d/%d elements, %d cores", "$SCALER_TYPE", n_elements, n_elements_total, $N_CORES))
 

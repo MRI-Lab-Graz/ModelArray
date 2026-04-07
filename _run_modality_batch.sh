@@ -4,12 +4,13 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: run_family_from_json.sh [--dry-run] [--nohup] /path/to/config.json
+Usage: _run_modality_batch.sh [--dry-run] [--nohup] /path/to/config.json
+       (Prefer using run_analysis.sh as the main entry point)
 
-Runs a modality-level ModelArray workflow from a higher-level JSON config.
+Runs a MODALITY-LEVEL ModelArray workflow (batch across multiple scalars).
 The config describes the dataset, qsirecon source, output folder, modality,
 and shared statistics template once; the script derives per-scalar configs and
-then runs the existing scalar-level pipeline for each selected scalar.
+then runs the scalar pipeline for each selected scalar.
 
 Options:
   --dry-run   Print the commands that would run without executing them.
@@ -243,7 +244,7 @@ if [[ "$NOHUP_MODE" == "true" ]]; then
   cfg_base="$(basename "$CONFIG_PATH" .json)"
   log_file="/tmp/modelarray_family_${cfg_base}_${ts_stamp}.log"
 
-  cmd=(bash "$SCRIPT_DIR/run_family_from_json.sh")
+  cmd=(bash "$SCRIPT_DIR/_run_modality_batch.sh")
   if [[ "$DRY_RUN" == "true" ]]; then
     cmd+=(--dry-run)
   fi
@@ -500,9 +501,9 @@ for scalar in "${SCALARS[@]}"; do
 
   ts "Generated config: $derived_config"
   if [[ "$DRY_RUN" == "true" ]]; then
-    run_step bash "$SCRIPT_DIR/run_full_from_json.sh" --dry-run "$derived_config"
+    run_step bash "$SCRIPT_DIR/_run_scalar_pipeline.sh" --dry-run "$derived_config"
   else
-    run_step bash "$SCRIPT_DIR/run_full_from_json.sh" "$derived_config"
+    run_step bash "$SCRIPT_DIR/_run_scalar_pipeline.sh" "$derived_config"
   fi
 
   SCALAR_ELAPSED=$(( $(date +%s) - SCALAR_START_EPOCH ))

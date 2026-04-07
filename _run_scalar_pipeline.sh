@@ -4,9 +4,10 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: run_full_from_json.sh [--dry-run] [--nohup] /path/to/config.json
+Usage: _run_scalar_pipeline.sh [--dry-run] [--nohup] /path/to/config.json
+       (Prefer using run_analysis.sh as the main entry point)
 
-Runs an end-to-end ModelArray workflow from a single JSON config:
+Runs an end-to-end ModelArray workflow for a SINGLE SCALAR from a JSON config:
   1. Optional ACPC->MNI registration/linking
   2. Group-mask staging
   3. Cohort CSV generation
@@ -143,7 +144,7 @@ if [[ "$NOHUP_MODE" == "true" ]]; then
   cfg_base="$(basename "$CONFIG_PATH" .json)"
   log_file="/tmp/modelarray_full_${cfg_base}_${ts_stamp}.log"
 
-  cmd=(bash "$SCRIPT_DIR/run_full_from_json.sh")
+  cmd=(bash "$SCRIPT_DIR/_run_scalar_pipeline.sh")
   if [[ "$DRY_RUN" == "true" ]]; then
     cmd+=(--dry-run)
   fi
@@ -157,12 +158,12 @@ if [[ "$NOHUP_MODE" == "true" ]]; then
   exit 0
 fi
 
-# Delegate modality-level (family) configs to the dedicated runner.
+# Delegate modality-level configs to the batch runner.
 if jq -e 'has("dataset") and has("modality") and has("statistics")' "$CONFIG_PATH" >/dev/null 2>&1; then
   if [[ "$DRY_RUN" == "true" ]]; then
-    exec bash "$SCRIPT_DIR/run_family_from_json.sh" --dry-run "$CONFIG_PATH"
+    exec bash "$SCRIPT_DIR/_run_modality_batch.sh" --dry-run "$CONFIG_PATH"
   fi
-  exec bash "$SCRIPT_DIR/run_family_from_json.sh" "$CONFIG_PATH"
+  exec bash "$SCRIPT_DIR/_run_modality_batch.sh" "$CONFIG_PATH"
 fi
 
 RAW_DATA_DIR="$(json_string '.data_dir')"
